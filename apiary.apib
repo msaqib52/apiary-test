@@ -5,30 +5,1728 @@ HOST: http://polls.apiblueprint.org/
 
 Polls is a simple API allowing consumers to view polls and vote in them.
 
-## Questions Collection [/questions]
+# Group Users
+Resources related to users in the API.
 
-### List All Questions [GET]
+## Users List [/users{?ids}{?organizations}{?courses}{?email}{?name}{?organization_display_name}{?username}{?has_organizations}]
+It view allows clients to retrieve/append a list of User entities
+
+### List All Users [GET]
+Provides paginated list of users, it supports email, username, name, organizations, courses enrolled, has_organizations, organization_display_name and id filters
+
++ Parameters
+    + ids (optional)
+    + organizations (optional)
+    + courses (optional)
+    + email (optional)
+    + name (optional)
+    + organization_display_name (optional)
+    + username (optional)
+    + has_organizations (optional)
+
++ Response 200 (application/json)
+
+        {
+            "count": 2,
+            "previous": null,
+            "num_pages": 1,
+            "results": [
+                {
+                    "id": 8,
+                    "email": "mcka_admin_user@mckinseyacademy.com",
+                    "username": "mcka_admin_user",
+                    "first_name": "mcka_admin_user",
+                    "last_name": "Tester",
+                    "created": "2017-05-11T12:37:15.043626Z",
+                    "is_active": true,
+                    "avatar_url": null,
+                    "city": "",
+                    "title": "",
+                    "country": "",
+                    "full_name": "mcka_admin_user Tester",
+                    "is_staff": false,
+                    "last_login": "2017-05-12T13:20:55.053550Z",
+                    "courses_enrolled": 0,
+                    "organizations": [
+                        {
+                            "url": "http://lms.mcka.local/api/server/organizations/1/",
+                            "id": 1,
+                            "name": "mckinsey_and_company",
+                            "display_name": "McKinsey and Company",
+                            "contact_name": "McKinsey and Company",
+                            "contact_email": "company@mckinseyacademy.com",
+                            "contact_phone": "",
+                            "logo_url": null,
+                            "created": "2017-05-11T12:37:16.581940Z",
+                            "modified": "2017-05-11T12:37:17.248873Z"
+                        }
+                    ],
+                    "roles": [
+                        "instructor",
+                        "staff"
+                    ],
+                    "grades": {
+                        "grade": null,
+                        "section_breakdown": null,
+                        "proforma_grade": null
+                    }
+                },
+                {
+                    "id": 9,
+                    "email": "mcka_subadmin_user@mckinseyacademy.com",
+                    "username": "mcka_subadmin_user",
+                    "first_name": "mcka_subadmin_user",
+                    "last_name": "Tester",
+                    "created": "2017-05-11T12:37:15.426030Z",
+                    "is_active": true,
+                    "avatar_url": null,
+                    "city": "",
+                    "title": "",
+                    "country": "",
+                    "full_name": "mcka_subadmin_user Tester",
+                    "is_staff": false,
+                    "last_login": null,
+                    "courses_enrolled": 0,
+                    "organizations": [
+                        {
+                            "url": "http://lms.mcka.local/api/server/organizations/1/",
+                            "id": 1,
+                            "name": "mckinsey_and_company",
+                            "display_name": "McKinsey and Company",
+                            "contact_name": "McKinsey and Company",
+                            "contact_email": "company@mckinseyacademy.com",
+                            "contact_phone": "",
+                            "logo_url": null,
+                            "created": "2017-05-11T12:37:16.581940Z",
+                            "modified": "2017-05-11T12:37:17.248873Z"
+                        }
+                    ],
+                    "roles": [],
+                    "grades": {
+                        "grade": null,
+                        "section_breakdown": null,
+                        "proforma_grade": null
+                    }
+                },
+            ],
+            "next": null
+        }
+
+### Create a New User [POST]
+You can create new user using this end point. It takes a JSON object
+containing user information.
+
++ Attributes
+    + email (string, required)
+    + username (required)
+    + password (required)
+    + title (optional)
+    + first_name (optional)
+    + last_name (optional)
+    + is_active (optional, boolean)
+    + is_staff (optional, boolean)
+    + city (optional)
+    + country (optional)
+    + level_of_education
+    + year_of_birth (optional)
+    + gender (optional)
+    + avatar_url (optional)
+
++ Request (application/json)
+
+        {
+            "email" : "honor@edx.org",
+            "username" : "honor",
+            "password" : "edx!@#",
+            "title" : "Software Engineer",
+            "first_name" : "Honor",
+            "last_name" : "Student",
+            "is_active" : "False",
+            "is_staff" : "False",
+            "city" : "Boston",
+            "country" : "US",
+            "level_of_education" : "hs",
+            "year_of_birth" : "1996",
+            "gender" : "F",
+            "avatar_url" : "http://example.com/avatar.png"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "username": "honor",
+            "first_name": "Honor",
+            "last_name": "Student",
+            "created": "2017-05-17T10:03:30.086Z",
+            "is_active": "False",
+            "uri": "http://lms.mcka.local/api/server/users/17",
+            "id": 17,
+            "is_staff": "False",
+            "last_login": null,
+            "email": "honor@edx.org"
+        }
+
+
+## Users Detail [/users/{user_id}]
+It allows clients to interact with a specific User entity
+
+### List Users Details [GET]
+
+Returns details of the specified User entity
+
++ Response 200 (application/json)
+
+        {
+            "username": "mcka_admin_user",
+            "city": "",
+            "first_name": "mcka_admin_user",
+            "last_name": "Tester",
+            "created": "2017-05-11T12:37:15.043Z",
+            "country": "",
+            "title": "",
+            "is_active": true,
+            "uri": "http://lms.mcka.local/api/server/users/8",
+            "avatar_url": null,
+            "id": 8,
+            "year_of_birth": null,
+            "is_staff": false,
+            "last_login": "2017-05-12T13:20:55.053Z",
+            "full_name": "mcka_admin_user Tester",
+            "gender": "",
+            "email": "mcka_admin_user@mckinseyacademy.com",
+            "resources": [
+                {
+                    "uri": "http://lms.mcka.local/api/server/users/8/groups"
+                },
+                {
+                    "uri": "http://lms.mcka.local/api/server/users/8/courses"
+                }
+            ],
+            "level_of_education": ""
+        }
+
+
+### Update User [POST]
+Provides the ability to modify specific fields for a User entity
+
++ Attributes
+    + email (optional)
+    + username (optional)
+    + password (optional)
+    + title (optional)
+    + first_name (optional)
+    + last_name (optional)
+    + is_active (optional, boolean)
+    + is_staff (optional, boolean)
+    + city (optional)
+    + country (optional)
+    + level_of_education
+    + year_of_birth (optional)
+    + gender (optional)
+    + avatar_url (optional)
+
++ Request (application/json)
+
+        {
+            "email" : "honor@edx.org",
+            "username" : "honor",
+            "password" : "edx!@#",
+            "title" : "Software Engineer",
+            "first_name" : "Honor",
+            "last_name" : "Student",
+            "is_active" : "False",
+            "is_staff" : "False",
+            "city" : "Boston",
+            "country" : "US",
+            "level_of_education" : "hs",
+            "year_of_birth" : "1996",
+            "gender" : "F",
+            "avatar_url" : "http://example.com/avatar.png"
+
+        }
+
++ Response 200 (application/json)
+
+        {
+            "username": "honor",
+            "first_name": "Honor",
+            "last_name": "Student",
+            "created": "2017-05-17T10:03:30.086Z",
+            "is_active": "False",
+            "uri": "http://lms.mcka.local/api/server/users/17",
+            "id": 17,
+            "is_staff": "False",
+            "last_login": null,
+            "email": "honor@edx.org"
+        }
+
+
+## Users Groups List [/users/{user_id}/groups{?type}{?course}]
+
+It allows clients to interact with the set of Group entities related to the specified User
+
+### Users Groups List [GET]
+
+Returns a JSON representation of the set of related Group entities, it supports type and course filters
+
++ Parameters
+    + type (optional)
+    + course (optional)
+
++ Response 200 (application/json)
+
+        {
+            "uri": "http://lms.mcka.local/api/server/users/17/groups",
+            "groups": [
+                {
+                    "id": 4,
+                    "name": "mcka_role_client_ta"
+                },
+                {
+                    "id": 7,
+                    "name": "mcka_role_internal_admin"
+                }
+            ]
+        }
+
+
+### Users Groups List [POST]
+
+Append a Group entity to the set of related Group entities for the specified User
++ Attributes
+    + group_id (required)
+
++ Request (application/json)
+
+        {
+            "group_id" : 6
+        }
+
++ Response 201 (application/json)
+
+        {
+            "group_id": "6",
+            "user_id": "17",
+            "uri": "http://lms.mcka.local/api/server/users/17/groups/6"
+        }
+
+
+## Users Groups Detail [/users/{user_id}/groups/{group_id}]
+
+It allows clients to interact with a specific User-Group relationship
+
+### Users Groups List [GET]
+
+Returns a JSON representation of the specified User-Group relationship
+
++ Response 200 (application/json)
+
+        {
+            "group_id": 4,
+            "user_id": 17,
+            "uri": "http://lms.mcka.local/api/server/users/17/groups/4"
+        }
+
+
+### Remove User-Group relationship [DELETE]
+
+Removes an existing User-Group relationship
+
++ Response 204 (application/json)
+
+
+## Users Courses List [/users/{user_id}/courses]
+
+It allows clients to interact with the set of Course entities related to the specified User
+
+### Users Courses List [GET]
+
+Returns a JSON representation of the set of related Course entities
 
 + Response 200 (application/json)
 
         [
             {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
+                "end": null,
+                "name": "edX Demonstration Course",
+                "is_active": true,
+                "uri": "http://lms.mcka.local/api/server/users/8/courses/course-v1:edX+DemoX+Demo_Course",
+                "start": "2013-02-05T05:00:00Z",
+                "id": "course-v1:edX+DemoX+Demo_Course"
+            },
+            {
+                "end": null,
+                "name": "Introduction to Algorithms",
+                "is_active": true,
+                "uri": "http://lms.mcka.local/api/server/users/8/courses/edX/CS301/2017_T1",
+                "start": "2017-01-01T00:00:00Z",
+                "id": "edX/CS301/2017_T1"
+            }
+        ]
+
+
+### Enroll User to Course [POST]
+
+It is used to create a new Course enrollment for the specified User
+
++ Attributes
+    + course_id (required)
+
++ Request (application/json)
+
+        {
+            "course_id" : "edX/CS301/2017_T1"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "is_active": true,
+            "uri": "http://lms.mcka.local/api/server/users/2/courses/edX/CS301/2017_T1",
+            "name": "Introduction to Algorithms",
+            "id": "edX/CS301/2017_T1"
+        }
+
+
+## Users Courses Detail [/users/{user_id}/courses/{course_id}]
+
+It allows clients to interact with a specific User-Course relationship (aka, enrollment)
+
+### Users Courses Detail [GET]
+
+Returns a JSON representation of the specified User-Course relationship
+
++ Response 200 (application/json)
+
+        {
+            "course_id": "edX/CS301/2017_T1",
+            "position": null,
+            "user_id": 2,
+            "uri": "http://lms.mcka.local/api/server/users/2/courses/edX/CS301/2017_T1",
+            "position_tree": {
+                "chapter": {
+                    "id": "i4x://edX/CS301/chapter/64f24c3c2d16492ba566f296ee0726a7"
+                },
+                "problem": {
+                    "id": "i4x://edX/CS301/problem/990c0db4262b431fa5b89d8662b71e0f"
+                },
+                "sequential": {
+                    "id": "i4x://edX/CS301/sequential/2c28b99079304fc4ac23f65942b2b9ad"
+                },
+                "vertical": {
+                    "id": "i4x://edX/CS301/vertical/f17a07d973ad484487875d374c5e5a20"
+                }
+            }
+        }
+
+
+### Store last-known location for Course, for User [POST]
+
+It Stores the last-known location for the Course, for the specified User (aka bookmark)
+
++ Attributes
+    + positions (required)
+        + parent_content_id (required)
+        + child_content_id (required)
+
++ Request (application/json)
+
+        {
+            "positions" : [
+                {
+                    "parent_content_id" : "edX/CS301/2017_T1",
+                    "child_content_id" : "i4x://edX/CS301/chapter/64f24c3c2d16492ba566f296ee0726a7"
+                }
+            ]
+        }
+
++ Response 200 (application/json)
+
+        {
+            "course_id": "edX/CS301/2017_T1",
+            "positions": [
+                "i4x://edX/CS301/chapter/64f24c3c2d16492ba566f296ee0726a7"
+            ],
+            "user_id": 2,
+            "uri": "http://lms.mcka.local/api/server/users/2/courses/edX/CS301/2017_T1"
+        }
+
+
+### Unenroll a User from a Course [DELETE]
+
+Unenrolls a User from a Course
+
++ Response 204 (application/json)
+
+
+## User Course Grade List [/users/{user_id}/courses/grades{?courses}]
+
+It allows clients to interact with the User's gradebook across courses
+
+### User Course Grade List [GET]
+
+Returns a JSON representation of the matched set from the gradebook, filtering can be applied by courses parameter consisting of comma-separated course identifiers
+
++ Parameters
+    + courses (optional)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "course_id": "GUniversity/G101/2014_G1",
+                "complete_status": false,
+                "proforma_grade": 0,
+                "current_grade": 0
+            },
+            {
+                "course_id": "TestUniversity/TS101/2014_T1",
+                "complete_status": false,
+                "proforma_grade": 0,
+                "current_grade": 0
+            },
+            {
+                "course_id": "UniversityTest/TS-02/2014",
+                "complete_status": false,
+                "proforma_grade": 0,
+                "current_grade": 0
+            }
+        ]
+
+
+## User Course Grade Detail [/users/{user_id}/courses/{course_id}/grades]
+
+It allows clients to interact with the  details of User's grade for a particular Course
+
+### User Course Grade Detail [GET]
+
+Returns a JSON representation of the details of User's grade for a particular Course
+
++ Response 200 (application/json)
+
+        {
+            "current_grade": 0,
+            "proforma_grade": 0,
+            "courseware_summary": [
+                {
+                    "course": "Sprint Grappa",
+                    "url_name": "977f06c5956d4b6fbea88f70b91009fa",
+                    "display_name": "MaxAttempt",
+                    "sections": [
+                        {
+                            "url_name": "faabb000ba574a1a91836c98eb56cc3b",
+                            "display_name": "MCQ",
+                            "graded": false,
+                            "format": "",
+                            "section_total": [
+                                0,
+                                0,
+                                false,
+                                "MCQ",
+                                null
+                            ],
+                            "due": null,
+                            "scores": []
+                        },
+                        {
+                            "url_name": "c613c92756e84a1abc64d819b9635bb1",
+                            "display_name": "max1",
+                            "graded": false,
+                            "format": "",
+                            "section_total": [
+                                1,
+                                1,
+                                false,
+                                "max1",
+                                null
+                            ],
+                            "due": null,
+                            "scores": [
+                                [
+                                    1,
+                                    1,
+                                    false,
+                                    "Mentoring XBlock",
+                                    null
+                                ]
+                            ]
+                        },
+                        {
+                            "url_name": "0fbf0bfbf95a4d5989afd16a958182f3",
+                            "display_name": "max2",
+                            "graded": false,
+                            "format": "",
+                            "section_total": [
+                                1,
+                                1,
+                                false,
+                                "max2",
+                                null
+                            ],
+                            "due": null,
+                            "scores": [
+                                [
+                                    1,
+                                    1,
+                                    false,
+                                    "Mentoring XBlock",
+                                    null
+                                ]
+                            ]
+                        },
+                        {
+                            "url_name": "a273b1b33af84bf5ac2efd135cc1c4a4",
+                            "display_name": "max3",
+                            "graded": false,
+                            "format": "",
+                            "section_total": [
+                                1,
+                                1,
+                                false,
+                                "max3",
+                                null
+                            ],
+                            "due": null,
+                            "scores": [
+                                [
+                                    1,
+                                    1,
+                                    false,
+                                    "Mentoring XBlock",
+                                    null
+                                ]
+                            ]
+                        },
+                        {
+                            "url_name": "f428a2fc2bb041b3b39ebe1ff49c357e",
+                            "display_name": "max4",
+                            "graded": false,
+                            "format": "",
+                            "section_total": [
+                                1,
+                                1,
+                                false,
+                                "max4",
+                                null
+                            ],
+                            "due": null,
+                            "scores": [
+                                [
+                                    1,
+                                    1,
+                                    false,
+                                    "Mentoring XBlock",
+                                    null
+                                ]
+                            ]
+                        },
+                        {
+                            "url_name": "08e6d929fe0a4c7a9fa2c6a609d1934a",
+                            "display_name": "nomax",
+                            "graded": false,
+                            "format": "",
+                            "section_total": [
+                                7,
+                                7,
+                                false,
+                                "nomax",
+                                null
+                            ],
+                            "due": null,
+                            "scores": [
+                                [
+                                    7,
+                                    7,
+                                    false,
+                                    "Mentoring XBlock",
+                                    null
+                                ]
+                            ]
+                        },
+                        {
+                            "url_name": "bbe4a4f7a12e4314883773e9d4713264",
+                            "display_name": "maxmrq",
+                            "graded": false,
+                            "format": "",
+                            "section_total": [
+                                1,
+                                1,
+                                false,
+                                "maxmrq",
+                                null
+                            ],
+                            "due": null,
+                            "scores": [
+                                [
+                                    1,
+                                    1,
+                                    false,
+                                    "Mentoring XBlock",
+                                    null
+                                ]
+                            ]
+                        }
+                    ]
+                },
+            {
+                "course": "Sprint Grappa",
+                "url_name": "0fc250e91ef04478a842930a02afd280",
+                "display_name": "MRQHTML",
+                "sections": [
                     {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
+                        "url_name": "17e9be5e51904a78a2577e0f789bac0e",
+                        "display_name": "html",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "html",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "19741ad8a7c6419090c10fa301201067",
+                        "display_name": "newhtml",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "newhtml",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    }
+                ]
+            },
+            {
+                "course": "Sprint Grappa",
+                "url_name": "b2cdcd4892a941569b0dd9388bb595cc",
+                "display_name": "statepersistence",
+                "sections": [
+                    {
+                        "url_name": "c359e5eedbbb4286ac54b309170c09f2",
+                        "display_name": "state",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "state",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    }
+                ]
+            },
+            {
+                "course": "Sprint Grappa",
+                "url_name": "21dfbe93934840bc814241755145b740",
+                "display_name": "Allinonestate",
+                "sections": [
+                    {
+                        "url_name": "2fec56e174dd4895a67971ede12eb2ac",
+                        "display_name": "one",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "one",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "49641dda65eb43afb92673b919b92652",
+                        "display_name": "two",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "two",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    }
+                ]
+            },
+            {
+                "course": "Sprint Grappa",
+                "url_name": "45b988d879c041c3a4c86e7bfaede0fe",
+                "display_name": "stateseperate",
+                "sections": [
+                    {
+                        "url_name": "41dbbd07a08742b29800328e8723b86b",
+                        "display_name": "freetext",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "freetext",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "8c31d62745644b209c806bcea46848d8",
+                        "display_name": "mcq1",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "mcq1",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "a0dafeb9d44341898aaf6296f7a5cb7b",
+                        "display_name": "mcq2",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "mcq2",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "af0463bbdfe1469a94f7c91067798960",
+                        "display_name": "mrq",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "mrq",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "818ef4192347443da828754e6c84ecbc",
+                        "display_name": "DD",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "DD",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    }
+                ]
+            },
+            {
+                "course": "Sprint Grappa",
+                "url_name": "08d279c13173498dbf9d49794b943bf1",
+                "display_name": "maxstate",
+                "sections": [
+                    {
+                        "url_name": "8030af014e43416ea657b13cc878f5da",
+                        "display_name": "maxfree",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "maxfree",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "ca5167d4b72743d7b22ff7f2f6a9ce55",
+                        "display_name": "maxmcq1",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "maxmcq1",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "1c938d6ccb74410985b4d240047b8416",
+                        "display_name": "maxmcq2",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "maxmcq2",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "d569b01c91484fd0b6d804e6d0fca786",
+                        "display_name": "maxmrq",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "maxmrq",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "d187e66b9d0d4a7397a8d6206d7932ea",
+                        "display_name": "dragdrop",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "dragdrop",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    }
+                ]
+            },
+            {
+                "course": "Sprint Grappa",
+                "url_name": "5ce3fe66b1a84cb2bc06a88b89955ee7",
+                "display_name": "DD",
+                "sections": [
+                    {
+                        "url_name": "8c9b46bae9ef41918e7e0d4e88d34e83",
+                        "display_name": "dd",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "dd",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "752334cf785943198b0f390c284b7aa9",
+                        "display_name": "dragdrop",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "dragdrop",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "a88eae26f6b649d296c19fe45f1832f9",
+                        "display_name": "firedrag",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "firedrag",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    }
+                ]
+            },
+            {
+                "course": "Sprint Grappa",
+                "url_name": "50b5916ed8d44f5f8837b27eebdcbb2e",
+                "display_name": "image explorer",
+                "sections": [
+                    {
+                        "url_name": "1e0341e4919140ee9a847d1dc62504bb",
+                        "display_name": "iex",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "iex",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "0e23096f388844c6a463c961be88bfd1",
+                        "display_name": "img ex",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "img ex",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "946201afc93a42bfa54cf570fee53428",
+                        "display_name": "hot spot",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "hot spot",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "95dda85db8114c80a9a16d4c2e6d8011",
+                        "display_name": "ooyala",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "ooyala",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "6921acbe73604116850295187dab3980",
+                        "display_name": "ooyala",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "ooyala",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    }
+                ]
+            },
+            {
+                "course": "Sprint Grappa",
+                "url_name": "14fcd9f65d9d461f82c64d73bd646cf4",
+                "display_name": "GROUP_PROJECT_DUMMY",
+                "sections": [
+                    {
+                        "url_name": "f5fdd085e17b4eae8337b532d764f919",
+                        "display_name": "Overview",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "Overview",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "38b383846215443da2a10dbed7351f97",
+                        "display_name": "Activity 1",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "Activity 1",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "b429ff562ae7417fa8aa714214367098",
+                        "display_name": "New Activity",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "New Activity",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
+                    },
+                    {
+                        "url_name": "d869b75adab44a328b0078ddf097cde5",
+                        "display_name": "Third Activity",
+                        "graded": false,
+                        "format": "",
+                        "section_total": [
+                            0,
+                            0,
+                            false,
+                            "Third Activity",
+                            null
+                        ],
+                        "due": null,
+                        "scores": []
                     }
                 ]
             }
-        ]
+            ],
+            "grade_summary": {
+                "section_breakdown": [
+                    {
+                        "category": "Homework",
+                        "percent": 0,
+                        "detail": "Homework 1 Unreleased - 0% (?/?)",
+                        "label": "HW 01"
+                    },
+                    {
+                        "category": "Homework",
+                        "percent": 0,
+                        "detail": "Homework 2 Unreleased - 0% (?/?)",
+                        "label": "HW 02"
+                    },
+                    {
+                        "category": "Homework",
+                        "percent": 0,
+                        "detail": "Homework 3 Unreleased - 0% (?/?)",
+                        "label": "HW 03"
+                    },
+                    {
+                        "category": "Homework",
+                        "percent": 0,
+                        "detail": "Homework 4 Unreleased - 0% (?/?)",
+                        "label": "HW 04"
+                    },
+                    {
+                        "category": "Homework",
+                        "percent": 0,
+                        "detail": "Homework 5 Unreleased - 0% (?/?)",
+                        "label": "HW 05"
+                    },
+                    {
+                        "category": "Homework",
+                        "percent": 0,
+                        "detail": "Homework 6 Unreleased - 0% (?/?)",
+                        "label": "HW 06"
+                    },
+                    {
+                        "category": "Homework",
+                        "percent": 0,
+                        "detail": "Homework 7 Unreleased - 0% (?/?)",
+                        "label": "HW 07"
+                    },
+                    {
+                        "category": "Homework",
+                        "percent": 0,
+                        "detail": "Homework 8 Unreleased - 0% (?/?)",
+                        "label": "HW 08"
+                    },
+                    {
+                        "category": "Homework",
+                        "percent": 0,
+                        "detail": "Homework 9 Unreleased - 0% (?/?)",
+                        "label": "HW 09"
+                    },
+                    {
+                        "category": "Homework",
+                        "percent": 0,
+                        "detail": "Homework 10 Unreleased - 0% (?/?)",
+                        "label": "HW 10"
+                    },
+                    {
+                        "category": "Homework",
+                        "label": "HW 11",
+                        "percent": 0,
+                        "detail": "Homework 11 Unreleased - 0% (?/?)",
+                        "mark": {
+                            "detail": "The lowest 2 Homework scores are dropped."
+                        }
+                    },
+                    {
+                        "category": "Homework",
+                        "label": "HW 12",
+                        "percent": 0,
+                        "detail": "Homework 12 Unreleased - 0% (?/?)",
+                        "mark": {
+                            "detail": "The lowest 2 Homework scores are dropped."
+                        }
+                    },
+                    {
+                        "category": "Homework",
+                        "label": "HW Avg",
+                        "percent": 0,
+                        "detail": "Homework Average = 0%",
+                        "prominent": true
+                    },
+                    {
+                        "category": "Lab",
+                        "percent": 0,
+                        "detail": "Lab 1 Unreleased - 0% (?/?)",
+                        "label": "Lab 01"
+                    },
+                    {
+                        "category": "Lab",
+                        "percent": 0,
+                        "detail": "Lab 2 Unreleased - 0% (?/?)",
+                        "label": "Lab 02"
+                    },
+                    {
+                        "category": "Lab",
+                        "percent": 0,
+                        "detail": "Lab 3 Unreleased - 0% (?/?)",
+                        "label": "Lab 03"
+                    },
+                    {
+                        "category": "Lab",
+                        "percent": 0,
+                        "detail": "Lab 4 Unreleased - 0% (?/?)",
+                        "label": "Lab 04"
+                    },
+                    {
+                        "category": "Lab",
+                        "percent": 0,
+                        "detail": "Lab 5 Unreleased - 0% (?/?)",
+                        "label": "Lab 05"
+                    },
+                    {
+                        "category": "Lab",
+                        "percent": 0,
+                        "detail": "Lab 6 Unreleased - 0% (?/?)",
+                        "label": "Lab 06"
+                    },
+                    {
+                        "category": "Lab",
+                        "percent": 0,
+                        "detail": "Lab 7 Unreleased - 0% (?/?)",
+                        "label": "Lab 07"
+                    },
+                    {
+                        "category": "Lab",
+                        "percent": 0,
+                        "detail": "Lab 8 Unreleased - 0% (?/?)",
+                        "label": "Lab 08"
+                    },
+                    {
+                        "category": "Lab",
+                        "percent": 0,
+                        "detail": "Lab 9 Unreleased - 0% (?/?)",
+                        "label": "Lab 09"
+                    },
+                    {
+                        "category": "Lab",
+                        "percent": 0,
+                        "detail": "Lab 10 Unreleased - 0% (?/?)",
+                        "label": "Lab 10"
+                    },
+                    {
+                        "category": "Lab",
+                        "label": "Lab 11",
+                        "percent": 0,
+                        "detail": "Lab 11 Unreleased - 0% (?/?)",
+                        "mark": {
+                            "detail": "The lowest 2 Lab scores are dropped."
+                        }
+                    },
+                    {
+                        "category": "Lab",
+                        "label": "Lab 12",
+                        "percent": 0,
+                        "detail": "Lab 12 Unreleased - 0% (?/?)",
+                        "mark": {
+                            "detail": "The lowest 2 Lab scores are dropped."
+                        }
+                    },
+                    {
+                        "category": "Lab",
+                        "label": "Lab Avg",
+                        "percent": 0,
+                        "detail": "Lab Average = 0%",
+                        "prominent": true
+                    },
+                    {
+                        "category": "Midterm Exam",
+                        "label": "Midterm",
+                        "percent": 0,
+                        "detail": "Midterm Exam = 0%",
+                        "prominent": true
+                    },
+                    {
+                        "category": "Final Exam",
+                        "label": "Final",
+                        "percent": 0,
+                        "detail": "Final Exam = 0%",
+                        "prominent": true
+                    }
+                ],
+            "grade": null,
+            "totaled_scores": {},
+            "percent": 0,
+            "grade_breakdown": [
+                {
+                    "category": "Homework",
+                    "percent": 0,
+                    "detail": "Homework = 0.00% of a possible 15.00%"
+                },
+                {
+                    "category": "Lab",
+                    "percent": 0,
+                    "detail": "Lab = 0.00% of a possible 15.00%"
+                },
+                {
+                    "category": "Midterm Exam",
+                    "percent": 0,
+                    "detail": "Midterm Exam = 0.00% of a possible 30.00%"
+                },
+                {
+                    "category": "Final Exam",
+                    "percent": 0,
+                    "detail": "Final Exam = 0.00% of a possible 40.00%"
+                }
+            ]
+            },
+            "grading_policy": {
+                "GRADE_CUTOFFS": {
+                    "Pass": 0.5
+                },
+                "GRADER": [
+                    {
+                        "min_count": 12,
+                        "weight": 0.15,
+                        "type": "Homework",
+                        "drop_count": 2,
+                        "short_label": "HW"
+                    },
+                    {
+                        "min_count": 12,
+                        "type": "Lab",
+                        "drop_count": 2,
+                        "weight": 0.15
+                    },
+                    {
+                        "min_count": 1,
+                        "weight": 0.3,
+                        "type": "Midterm Exam",
+                        "drop_count": 0,
+                        "short_label": "Midterm"
+                    },
+                    {
+                        "min_count": 1,
+                        "weight": 0.4,
+                        "type": "Final Exam",
+                        "drop_count": 0,
+                        "short_label": "Final"
+                    }
+                ]
+            }
+        }
+
+
+## User Preferences [/users/{user_id}/preferences]
+
+It allows clients to interact with the set of Preference key-value pairs related to the specified User
+
+### User Preferences [GET]
+
+Returns a JSON representation of the set of User preferences
+
++ Response 200 (application/json)
+
+        {
+            "current_program_id": "NO_PROGRAM",
+            "current_course_id": "FT/FT101/FT"
+        }
+
+
+### Create User Preferences [POST]
+
+Append a new User Preference key-value pair to the set of preferences for the specified User
+
++ Attributes
+    + keyname (required, string)
+    + value (required, string)
+
++ Request (application/json)
+
+        {
+            "favorite_color" : "blue"
+        }
+
++ Response 201 (application/json)
+
+        {}
+
+
+## User Preferences Detail [/users/{user_id}/preferences/{preference_id}]
+
+It allows allows clients to interact with the User's preference details
+
+### User Preferences [GET]
+
+Returns a JSON representation of the specified preference details for the specified user
+
++ Response 200 (application/json)
+
+        {
+            "favorite_color": "blue"
+        }
+
+
+### Remove User Preferences [DELETE]
+
+Removes the specified preference from the user's record
+
++ Response 204 (application/json)
+
+
+## User Organization List [/users/{user_id}/organizations]
+
+It allows clients to retrieve a list of organizations a user belongs to
+
+### User Organization List [GET]
+
+Returns a JSON representation of the paginated list of organizations for a user
+
++ Response 200 (application/json)
+
+        {
+            "count": 2,
+            "previous": null,
+            "num_pages": 1,
+            "results": [
+                {
+                    "url": "http://lms.mcka.local/api/server/organizations/1/",
+                    "id": 1,
+                    "name": "mckinsey_and_company",
+                    "display_name": "McKinsey and Company",
+                    "contact_name": "McKinsey and Company",
+                    "contact_email": "company@mckinseyacademy.com",
+                    "contact_phone": "",
+                    "logo_url": null,
+                    "created": "2017-05-11T12:37:16.581940Z",
+                    "modified": "2017-05-11T12:37:17.248873Z"
+                },
+                {
+                    "url": "http://lms.mcka.local/api/server/organizations/2/",
+                    "id": 2,
+                    "name": "edx",
+                    "display_name": "edX",
+                    "contact_name": "edx",
+                    "contact_email": "company@edx.com",
+                    "contact_phone": "",
+                    "logo_url": null,
+                    "created": "2017-05-11T12:37:16.581940Z",
+                    "modified": "2017-05-11T12:37:17.248873Z"
+                }
+            ],
+            "next": null
+        }
+
+
+## User Workgroups List [/users/{user_id}/workgroups]
+
+It allows clients to retrieve a list of workgroups a user belongs to
+
+### User Workgroups List [GET]
+
+Returns a JSON representation of the paginated list of workgroups for a user
+
++ Response 200 (application/json)
+
+        {
+            "count": 2,
+            "previous": null,
+            "num_pages": 1,
+            "results": [
+                {
+                    "id": 18,
+                    "url": "http://qa.mckinsey.edx.org/api/server/workgroups/18/",
+                    "created": "2014-08-06T11:35:52Z",
+                    "modified": "2014-08-08T18:23:00Z",
+                    "name": "Group 4",
+                    "project": "http://qa.mckinsey.edx.org/api/server/projects/4/"
+                },
+                {
+                    "id": 520,
+                    "url": "http://qa.mckinsey.edx.org/api/server/workgroups/520/",
+                    "created": "2015-07-27T13:39:09Z",
+                    "modified": "2015-07-27T13:39:09Z",
+                    "name": "Group 1",
+                    "project": "http://qa.mckinsey.edx.org/api/server/projects/198/"
+                }
+            ],
+            "next": null
+        }
+
+
+## User Course Completions List [/users/{user_id}/courses/{course_id}/completions{?content_id}]
+
+It allows clients to retrieve a list of course completions for a user
+
+### User Course Completions List [GET]
+
+Provides paginated list of course completions for a user. Use content_id parameter to filter the user's course completions by course content
+
++ Parameters
+    + content_id (optional)
+
++ Response 200 (application/json)
+
+        {
+            "count": 1,
+            "previous": null,
+            "num_pages": 1,
+            "results": [
+                {
+                    "id": 1,
+                    "user_id": 8,
+                    "course_id": "course-v1:edX+DemoX+Demo_Course",
+                    "content_id": "block-v1:edX+DemoX+Demo_Course+type@about+block@overview",
+                    "stage": null,
+                    "created": "2017-05-11T13:15:54.338039Z",
+                    "modified": "2017-05-11T13:15:54.338455Z"
+                }
+            ],
+            "next": null
+        }
+
+
+## User Social Metrics [/users/{user_id}/courses/{course_id}/metrics/social]
+
+It allows clients to query about the activity of a user in the forums in the specified course
+
+### User Social Metrics [GET]
+
+Returns a list of social metrics for that user in the specified course
+
++ Response 200 (application/json)
+
+        {
+            "num_threads": 1,
+            "num_thread_followers": 0,
+            "num_replies": 0,
+            "num_flagged": 0,
+            "num_comments": 0,
+            "num_threads_read": 0,
+            "num_downvotes": 0,
+            "num_upvotes": 0,
+            "num_comments_generated": 0
+        }
+
+
+## User Metrics Cities List [/users/metrics/cities{?city}]
+
+It allows clients to retrieve ordered list of user count by city
+
+### User Metrics Cities List [GET]
+
+Provides paginated list of user count, To get user count a particular city, city filter can be applied
+
++ Parameters
+    + city (optional)
+
++ Response 200 (application/json)
+
+        {
+            "count": 2,
+            "previous": null,
+            "num_pages": 1,
+            "results": [
+                {
+                    "city": "Boston",
+                    "count": 3
+                },
+                {
+                    "city": "Seatle",
+                    "count": 2
+                }
+            ],
+            "next": null
+        }
+
+
+## User Roles List [/users/{user_id}/courses/{course_id}/roles]
+
+It allows clients to interact with the User's roleset
+
+### User Roles List [GET]
+
+Returns a JSON representation of the specified Course roleset
+
++ Response 200 (application/json)
+
+        {
+            "count": 2,
+            "previous": null,
+            "num_pages": 1,
+            "results": [
+                {
+                    "course_id": "edX/CS301/2017_T1",
+                    "role": "instructor"
+                },
+                {
+                    "course_id": "edX/CS301/2017_T1",
+                    "role": "staff"
+                }
+            ],
+            "next": null
+        }
+
+
+### Create role for User [POST]
+
+Adds a new role to the User's roleset
+
++ Attributes
+    + course_id (required, string)
+    + role (required, string)
+
++ Request (application/json)
+
+        {
+            "course_id" : "edX/CS301/2017_T1",
+            "role" : "observer"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "course_id": "edX/CS301/2017_T1",
+            "role": "observer"
+        }
+
+
+### Replace existing roleset for User [PUT]
+
+Replace the existing roleset with the provided roleset
+
++ Attributes
+    + roles (required)
+    + ignore_roles (optional)
+
++ Request (application/json)
+
+        {
+            "roles": [
+                {
+                    "course_id": "edX/DemoX/Demo_Course",
+                    "role": "instructor"
+                },
+                {
+                    "course_id": "edX/CS301/2017_T1",
+                    "role": "observer"
+                },
+                {
+                    "course_id": "edX/CS301/2017_T1",
+                    "role": "staff"
+                }
+            ]
+        }
+
++ Response 200 (application/json)
+
+        {
+            "roles": [
+                {
+                    "course_id": "edX/DemoX/Demo_Course",
+                    "role": "instructor"
+                },
+                {
+                    "course_id": "edX/CS301/2017_T1",
+                    "role": "observer"
+                },
+                {
+                    "course_id": "edX/CS301/2017_T1",
+                    "role": "staff"
+                }
+            ]
+        }
+
+
+## User Roles Courses Detail [/users/{user_id}/roles/{role}/courses/{course_id}]
+
+It allows clients to interact with a specific User/Course Role
+
+### Removes existing Course Role [DELETE]
+
+Removes an existing Course Role specification
+
++ Response 204 (application/json)
+
+
+## User Notifications Detail [/users/{user_id}/notifications/{msg_id}]
+
+### Mark User's Notification Read [POST]
+
+Allows for a caller to mark a user's notification as read, passed in by msg_id. Note that the user_msg_id must belong to the user_id passed in
+
++ Attributes
+    + read (required)
+
++ Request (application/json)
+
+        {
+            "read": "True"
+        }
+
++ Response 201 (application/json)
+
+        {}
