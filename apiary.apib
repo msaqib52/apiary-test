@@ -1,9 +1,183 @@
 FORMAT: 1A
-HOST: http://polls.apiblueprint.org/
+HOST: http://api.edx.org
 
-# Polls API
+# Open edX API
+Open edX API is the machine interface for the world-reknowned MOOC platform.
 
-Polls is a simple API allowing consumers to view polls and vote in them.
+
+## Allowed HTTP/S requests:
+* <code>POST</code> - To create or update a resource
+* <code>GET</code> - To retrieve a resource or list of resources
+* <code>DELETE</code> - To delete/inactivate a resource
+
+## Description Of Usual Server Responses
+* <code>200 OK</code> - GET - the request was successful, an existing resource is returned
+* <code>201 Created</code> - POST - the request was successful, a new resource is created and returned
+* <code>204 No Content</code> - DELETE - the request was successful, an existing resource is removed
+* <code>401 Unauthorized</code> - POST - authentication failed, or user lacks permission to execute the requested operation.
+* <code>403 Forbidden</code> - POST - authentication succesful, but user is inactive
+* <code>404 Not Found</code> - GET - no existing resource matches the provided identifier
+* <code>405 Method Not Allowed</code> - POST/GET/DELETE - requested method is not supported for resource.
+* <code>406 Not Acceptable</code> - POST - request syntax is correct, but semantic issue(s) were encountered.
+* <code>409 Conflict</code> - POST - request conflicts with existing system state (e.g., duplicate resource).
+
+409 Conflicts arise during POST operations due to duplicate requests against constrained entities.  An additional set of elements is included in the response:
+    {
+        . . .
+        "message":"Information related to the conflict.",
+        "field_conflict":"fieldname"
+    }
+
+
+# Group Api
+Resources related to the API.
+
+## Api Detail [/]
+List top-level information about the Open edX API
+
+### Api Detail [GET]
+
++ Response 200 (application/json)
+
+        {
+            "csrf_token": "T1icCawXVhhzBoWfpqbOvFxGWnlTQYpY",
+            "name": "Open edX API",
+            "documentation": "http://docs.openedxapi.apiary.io",
+            "uri": "http://lms.mcka.local/api/server/",
+            "resources": [
+                {
+                    "uri": "http://lms.mcka.local/api/server/courses"
+                },
+                {
+                    "uri": "http://lms.mcka.local/api/server/groups"
+                },
+                {
+                    "uri": "http://lms.mcka.local/api/server/projects"
+                },
+                {
+                    "uri": "http://lms.mcka.local/api/server/sessions"
+                },
+                {
+                    "uri": "http://lms.mcka.local/api/server/system"
+                },
+                {
+                    "uri": "http://lms.mcka.local/api/server/users"
+                }
+            ],
+            "description": "Machine interface for interactions with Open edX."
+        }
+
+
+## System Detail [/system]
+List top-level information about the Open edX API
+
+### System Detail [GET]
+
++ Response 200 (application/json)
+
+        {
+            "documentation": "http://docs.openedxapi.apiary.io/#get-%2Fapi%2Fsystem",
+            "name": "Open edX System API",
+            "uri": "http://lms.mcka.local/api/server/system",
+            "description": "System interface for managing groups, users, and sessions."
+        }
+
+
+# Group Sessions
+Resources related to sessions in the API.
+
+## Sessions List [/sessions]
+It allows clients to creates a new session with the edX LMS.
+
+### Create a New User Session [POST]
+
++ Attributes
+    + username (required)
+    + password (required)
+
++ Request (application/json)
+
+        {
+            "username" : "staff",
+            "password" : "edx"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "csrftoken": "T1icCawXVhhzBoWfpqbOvFxGWnlTQYpY",
+            "token": "ymr89zyrlkyxneac8o3cw5dyneq349km",
+            "expires": 1209600,
+            "user": {
+                "id": 5,
+                "email": "staff@example.com",
+                "username": "staff",
+                "first_name": "",
+                "last_name": "",
+                "created": "2016-09-01T19:18:26.026495Z",
+                "is_active": true
+            },
+            "uri": "http://lms.mcka.local/api/server/sessions/ymr89zyrlkyxneac8o3cw5dyneq349km"
+        }
+
+
+## Sessions Detail [/sessions/{session_id}]
+It gets a details about a specific API session, as well as enables you to delete an API session or "upgrade" a session by logging in the user.
+
+
+### Sessions Detail [GET]
+Returns details about a specific API session
+
++ Response 200 (application/json)
+
+        {
+            "token": "ymr89zyrlkyxneac8o3cw5dyneq349km",
+            "expires": 1209600,
+            "user_id": 5,
+            "uri": "http://lms.mcka.local/api/server/sessions/ymr89zyrlkyxneac8o3cw5dyneq349km"
+        }
+
+
+### Upgrade Session [POST]
+Login and upgrade an existing session from anonymous to authenticated.
+
++ Attributes
+    + username (required)
+    + password (required)
+
++ Request (application/json)
+
+        {
+            "username" : "staff",
+            "password" : "edx"
+        }
+
+
++ Response 201 (application/json)
+
+        {
+            "csrftoken": "T1icCawXVhhzBoWfpqbOvFxGWnlTQYpY",
+            "token": "9r7xpx4tjae2cp3sklgk6wzqks9032rm",
+            "expires": 1209600,
+            "user": {
+                "id": 5,
+                "email": "staff@example.com",
+                "username": "staff",
+                "first_name": "",
+                "last_name": "",
+                "created": "2016-09-01T19:18:26.026495Z",
+                "is_active": true
+            },
+            "uri": "http://lms.mcka.local/api/server/sessions/ymr89zyrlkyxneac8o3cw5dyneq349km/9r7xpx4tjae2cp3sklgk6wzqks9032rm"
+        }
+
+
+### Remove Session [DELETE]
+
+Removes an existing session
+
++ Response 204 (application/json)
+
 
 # Group Users
 Resources related to users in the API.
@@ -1730,3 +1904,1601 @@ Allows for a caller to mark a user's notification as read, passed in by msg_id. 
 + Response 201 (application/json)
 
         {}
+
+
+# Group Courses
+Resources related to courses in the API.
+
+
+## Course Content List [/courses/{course_id}/content{?type}]
+
+It gets a collection of content for a given course. You can use the **uri** value in the response to get details for that content entity. It has an optional type parameter that allows you to filter the response by content type.
+
+### Course Content List [GET]
+
+Returns a JSON representation of collection of content for a given course
++ Parameters
+    + type (optional)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "category": "chapter",
+                "end": null,
+                "name": "Introduction to strategy",
+                "due": null,
+                "uri": "http://qa.mckinsey.edx.org/api/server/courses/bbg/cs1/2017/content/i4x://bbg/cs1/chapter/04331cefe53a4cf9a01bd0854c5a7081",
+                "start": "2016-06-07T01:00:00Z",
+                "id": "i4x://bbg/cs1/chapter/04331cefe53a4cf9a01bd0854c5a7081"
+            },
+            {
+                "category": "chapter",
+                "end": null,
+                "name": "Ten Timeless Tests",
+                "due": null,
+                "uri": "http://qa.mckinsey.edx.org/api/server/courses/bbg/cs1/2017/content/i4x://bbg/cs1/chapter/4f3b28fa71b34ba2ba384065fb7d95b6",
+                "start": "2016-06-07T01:00:00Z",
+                "id": "i4x://bbg/cs1/chapter/4f3b28fa71b34ba2ba384065fb7d95b6"
+            },
+            {
+                "category": "chapter",
+                "end": null,
+                "name": "The Strategy Method",
+                "due": null,
+                "uri": "http://qa.mckinsey.edx.org/api/server/courses/bbg/cs1/2017/content/i4x://bbg/cs1/chapter/fdfa5e6cb6dc4521918c96eda5c580c5",
+                "start": "2016-06-07T01:00:00Z",
+                "id": "i4x://bbg/cs1/chapter/fdfa5e6cb6dc4521918c96eda5c580c5"
+            }
+        ]
+
+
+## Course Content Detail [/courses/{course_id}/content/{content_id}{?type}]
+
+It returns a JSON representation for a specified CourseContent entity. If the specified CourseContent is the Course, the course representation is returned.
+
+### Course Content Detail [GET]
+
+Returns a JSON representation of content details for a given course
++ Parameters
+    + type (optional)
+
++ Response 200 (application/json)
+
+        {
+            "category": "chapter",
+            "end": null,
+            "name": "Introduction to strategy",
+            "children": [
+                {
+                    "category": "sequential",
+                    "end": null,
+                    "name": "Intro",
+                    "due": "2016-06-13T00:00:00Z",
+                    "uri": "http://qa.mckinsey.edx.org/api/server/courses/bbg/cs1/2017/content/i4x://bbg/cs1/sequential/8f6f79bcaacf49ca82e01105420954d9",
+                    "start": "2016-06-07T01:00:00Z",
+                    "id": "i4x://bbg/cs1/sequential/8f6f79bcaacf49ca82e01105420954d9"
+                }
+            ],
+            "due": null,
+            "uri": "http://qa.mckinsey.edx.org/api/server/courses/bbg/cs1/2017/content/i4x://bbg/cs1/chapter/04331cefe53a4cf9a01bd0854c5a7081",
+            "start": "2016-06-07T01:00:00Z",
+            "id": "i4x://bbg/cs1/chapter/04331cefe53a4cf9a01bd0854c5a7081",
+            "resources": [
+                {
+                    "uri": "http://qa.mckinsey.edx.org/api/server/courses/bbg/cs1/2017/content/i4x://bbg/cs1/chapter/04331cefe53a4cf9a01bd0854c5a7081/groups"
+                },
+                {
+                    "uri": "http://qa.mckinsey.edx.org/api/server/courses/bbg/cs1/2017/content/i4x://bbg/cs1/chapter/04331cefe53a4cf9a01bd0854c5a7081/users"
+                }
+            ]
+        }
+
+
+## Courses List [/courses{?course_id}]
+
+It returns paginated list of courses in the edX Platform. You can use the uri value in the response to get details of the course. course list can be filtered by course_id
+
+### Courses List [GET]
+
+Returns a JSON representation of collection of courses
++ Parameters
+    + course_id (optional)
+
++ Response 200 (application/json)
+
+        {
+            "count": 2,
+            "previous": null,
+            "num_pages": 1,
+            "results": [
+                {
+                    "id": "course-v1:edX+DemoX+Demo_Course",
+                    "name": "edX Demonstration Course",
+                    "category": "course",
+                    "number": "DemoX",
+                    "org": "edX",
+                    "uri": "http://lms.mcka.local/api/server/courses/course-v1:edX+DemoX+Demo_Course",
+                    "course_image_url": "/asset-v1:edX+DemoX+Demo_Course+type@asset+block@images_course_image.jpg",
+                    "due": null,
+                    "start": "2013-02-05T05:00:00Z",
+                    "end": null
+                },
+                {
+                    "id": "edX/CS301/2017_T1",
+                    "name": "Introduction to Algorithms",
+                    "category": "course",
+                    "number": "CS301",
+                    "org": "edX",
+                    "uri": "http://lms.mcka.local/api/server/courses/edX/CS301/2017_T1",
+                    "course_image_url": "/c4x/edX/CS301/asset/images_course_image.jpg",
+                    "due": null,
+                    "start": "2017-01-01T00:00:00Z",
+                    "end": null
+                }
+            ],
+            "next": null
+        }
+
+
+## Course Detail [/courses/{course_id}{?depth}]
+
+It returns details for a course. You can use the uri values in the resources collection in the response to get more course information, it has an optional depth parameter that allows you to get course content children to the specified tree level.
+
+### Course Detail [GET]
+
+Returns a JSON representation of course details for a specified course
++ Parameters
+    + depth (optional)
+
++ Response 200 (application/json)
+
+        {
+            "category": "course",
+            "end": null,
+            "name": "edX Demonstration Course",
+            "uri": "http://lms.mcka.local/api/server/courses/course-v1:edX+DemoX+Demo_Course",
+            "number": "DemoX",
+            "due": null,
+            "start": "2013-02-05T05:00:00Z",
+            "org": "edX",
+            "id": "course-v1:edX+DemoX+Demo_Course",
+            "resources": [
+                {
+                    "uri": "http://lms.mcka.local/api/server/courses/course-v1:edX+DemoX+Demo_Course/content/"
+                },
+                {
+                    "uri": "http://lms.mcka.local/api/server/courses/course-v1:edX+DemoX+Demo_Course/groups/"
+                },
+                {
+                    "uri": "http://lms.mcka.local/api/server/courses/course-v1:edX+DemoX+Demo_Course/overview/"
+                },
+                {
+                    "uri": "http://lms.mcka.local/api/server/courses/course-v1:edX+DemoX+Demo_Course/updates/"
+                },
+                {
+                    "uri": "http://lms.mcka.local/api/server/courses/course-v1:edX+DemoX+Demo_Course/static_tabs/"
+                },
+                {
+                    "uri": "http://lms.mcka.local/api/server/courses/course-v1:edX+DemoX+Demo_Course/users/"
+                }
+            ],
+            "course_image_url": "/asset-v1:edX+DemoX+Demo_Course+type@asset+block@images_course_image.jpg"
+        }
+
+
+## Courses Groups List [/courses/{course_id}/groups{?type}]
+
+It returns a collection of course group relationship entities for a specified course entity. It has an optional <code>type</code> parameter that allows you to filter the groups returned.
+
+### Courses Groups List [GET]
+
+Returns a JSON representation of the set of Course Group Relationship entities
++ Parameters
+    + type (optional)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 1701,
+                "name": "BMP"
+            },
+            {
+                "id": 1703,
+                "name": "Assignment group for 1063"
+            },
+            {
+                "id": 1704,
+                "name": "Assignment group for 1064"
+            }
+        ]
+
+
+### Create Course Group relationship  [POST]
+
+Creates a new relationship between the provided Course and Group
++ Attributes
+    + group_id (required)
+
++ Request (application/json)
+
+        {
+            "group_id" : 1,
+        }
+
+
++ Response 201 (application/json)
+
+        {
+            "course_id": "course-v1:edX+DemoX+Demo_Course",
+            "group_id": "1",
+            "uri": "http://lms.mcka.local/api/server/courses/course-v1:edX+DemoX+Demo_Course/groups/1"
+        }
+
+
+## Course Group Detail [/courses/{course_id}/group/{group_id}]
+
+It allows clients to interact with a specific Course Group Relationship entity.
+
+### Course Group Detail [GET]
+
+Returns a JSON representation of course details for a specified course
+
++ Response 200 (application/json)
+
+        {
+            "course_id": "course-v1:edX+DemoX+Demo_Course",
+            "group_id": "1",
+            "uri": "http://lms.mcka.local/api/server/courses/course-v1:edX+DemoX+Demo_Course/groups/1"
+        }
+
+
+### Remove Course Group relationship [DELETE]
+
+Removes an existing Course Group relationship
+
++ Response 204 (application/json)
+
+
+## Course Overview [/courses/{course_id}/overview]
+
+It returns an HTML representation of the overview for the specified course. Courses overview has an optional parse parameter that when true breaks the response into a collection named sections. By default, parse is false.
+
+### Course Overview [GET]
+
+Returns a JSON representation of course overview for a specified course
+
++ Response 200 (application/json)
+
+        {
+            "overview_html": "<section class=\"about\">\n   <h2>About This Course</h2>\n   <p>Include your long course description here. The long course description should contain 150-400 words.</p>\n\n   <p>This is paragraph 2 of the long course description. Add more paragraphs as needed. Make sure to enclose them in paragraph tags.</p>\n </section>\n\n <section class=\"prerequisites\">\n   <h2>Prerequisites</h2>\n   <p>Add information about course prerequisites here.</p>\n </section>\n\n <section class=\"course-staff\">\n   <h2>Course Staff</h2>\n   <article class=\"teacher\">\n     <div class=\"teacher-image\">\n       <img src=\"/asset-v1:edX+DemoX+Demo_Course+type@asset+block/images_pl-faculty.png\" align=\"left\" style=\"margin:0 20 px 0\">\n     </div>\n\n     <h3>Staff Member #1</h3>\n     <p>Biography of instructor/staff member #1</p>\n   </article>\n\n   <article class=\"teacher\">\n     <div class=\"teacher-image\">\n       <img src=\"/asset-v1:edX+DemoX+Demo_Course+type@asset+block/images_pl-faculty.png\" align=\"left\" style=\"margin:0 20 px 0\">\n     </div>\n\n     <h3>Staff Member #2</h3>\n     <p>Biography of instructor/staff member #2</p>\n   </article>\n </section>\n\n <section class=\"faq\">\n   <section class=\"responses\">\n     <h2>Frequently Asked Questions</h2>\n     <article class=\"response\">\n       <h3>What web browser should I use?</h3>\n       <p>The Open edX platform works best with current versions of Chrome, Firefox or Safari, or with Internet Explorer version 9 and above.</p>\n\n       <p>See our <a href=\"http://edx.readthedocs.org/en/latest/browsers.html\">list of supported browsers</a> for the most up-to-date information.</p>\n     </article>\n\n     <article class=\"response\">\n       <h3>Question #2</h3>\n       <p>Your answer would be displayed here.</p>\n     </article>\n   </section>\n </section>\n",
+            "course_image_url": "/asset-v1:edX+DemoX+Demo_Course+type@asset+block@images_course_image.jpg",
+            "course_video": ""
+        }
+
+
+## Course Updates [/courses/{course_id}/updates]
+
+It returns an HTML representation of the overview for the specified course. Courses Updates has an optional parse parameter that when true breaks the response into a collection named postings. By default, parse is false.
+
+### Course Updates [GET]
+
++ Response 200 (application/json)
+
+        {
+            "content": "<ol><li><h2>Welcome!</h2>Hi! Welcome to the edX demonstration course. We built this to help you become more familiar with taking a course on edX prior to your first day of class. \n<br><br>\nIn a live course, this section is where all of the latest course announcements and updates would be. To get started with this demo course, view the \n\n\n<a href=\"/courses/course-v1:edX+DemoX+Demo_Course/courseware/d8a6192ade314473a78242dfeedfbf5b/edx_introduction/\">courseware page</a> and click &#8220;Example Week 1&#8221; in the left hand navigation.  \n\n\n\n<br><br>\nWe tried to make this both fun and informative. We hope you like it.  &#8211; The edX Team \n\n\n</li></ol>"
+        }
+
+
+## Course Static Tabs List [/courses/{course_id}/static_tabs{?detail}]
+
+It returns a collection of custom pages in the course. Course Static Tabs List has an optional detail parameter that when true includes the custom page content in the response.
+
+### Course Static Tabs List [GET]
+
++ Parameters
+    + detail (optional)
+
++ Response 200 (application/json)
+
+        {
+            "tabs": [
+                {
+                    "id": "d15fe2e326094e12a2a338c04ddfaaf8",
+                    "name": "Lesson1"
+                },
+                {
+                    "id": "1ebbd598c08d4b93872528066edf8605",
+                    "name": "Lesson2"
+                },
+                {
+                    "id": "5d41a4b7e88740dc9c4cf3ee03372508",
+                    "name": "Lesson3"
+                }
+            ]
+        }
+
+
+## Course Static Tabs Detail [/courses/{course_id}/static_tabs/{tab_id}]
+
+It returns a custom page in the course, including the page content.
+
+### Course Static Tabs Detail [GET]
+
++ Response 200 (application/json)
+
+        {
+            "id": "d15fe2e326094e12a2a338c04ddfaaf8",
+            "name": "Lesson1",
+            "content": "<p>&ldquo;It really is just the discomfort in anticipation but also during the conversation&hellip;&rdquo;</p>"
+        }
+
+
+## Course Users List [/courses/{course_id}/users{?fields}{?organizations}{?groups}{?workgroups}{?exclude_groups}]
+
+It returns a collection of users enrolled in the course. It can also be used to enroll a new user in the course.
+
+### Course Users List [GET]
+
+Returns a JSON representation of users enrolled in the course, It supports dynamic fields which means we can pass list of fields we want. It aslo supports filtering by organizations, groups, workgroups and exclude_groups.
+
++ Parameters
+    + fields (optional)
+    + organizations (optional)
+    + groups (optional)
+    + workgroups (optional)
+    + exclude_groups (optional)
+
++ Response 200 (application/json)
+
+        {
+            "count": 3,
+            "previous": null,
+            "num_pages": 1,
+            "results": [
+                {
+                    "id": 15,
+                    "email": "client_observer_user@mckinseyacademy.com",
+                    "username": "client_observer_user",
+                    "first_name": "client_observer_user",
+                    "last_name": "Tester",
+                    "created": "2017-05-11T12:37:16.335511Z",
+                    "is_active": true,
+                    "avatar_url": null,
+                    "city": "Seatle",
+                    "title": "",
+                    "country": "",
+                    "full_name": "client_observer_user Tester",
+                    "is_staff": false,
+                    "last_login": "2017-05-17T13:33:52.036866Z"
+                },
+                {
+                    "id": 14,
+                    "email": "client_ta_user@mckinseyacademy.com",
+                    "username": "client_ta_user",
+                    "first_name": "client_ta_user",
+                    "last_name": "Tester",
+                    "created": "2017-05-11T12:37:16.093740Z",
+                    "is_active": true,
+                    "avatar_url": null,
+                    "city": "",
+                    "title": "",
+                    "country": "",
+                    "full_name": "client_ta_user Tester",
+                    "is_staff": false,
+                    "last_login": "2017-05-18T09:36:10.935897Z"
+                },
+                {
+                    "id": 2,
+                    "email": "honor@example.com",
+                    "username": "honor",
+                    "first_name": "",
+                    "last_name": "",
+                    "created": "2016-09-01T19:18:14.237644Z",
+                    "is_active": true,
+                    "avatar_url": "",
+                    "city": "Boston",
+                    "title": "Software Engineer",
+                    "country": "US",
+                    "full_name": "Honor Student",
+                    "is_staff": false,
+                    "last_login": "2017-05-18T09:34:17.762289Z"
+                }
+            ],
+            "next": null
+        }
+
+
+### Enroll User to Course  [POST]
+
+Enroll user to a course, you must include either a user_id or email for user in the request JSON object.
++ Attributes
+    + user_id (required)
+
++ Request (application/json)
+
+        {
+            "user_id" : 1,
+        }
+
+
++ Response 201 (application/json)
+
+
+## Course User Detail [/courses/{course_id}/users/{user_id}]
+
+It returns a details about a specified user of a course. You also use it to unenroll a user from the course.
+
+### Course User Detail [GET]
+
++ Response 200 (application/json)
+
+        {
+            "course_id": "course-v1:edX+DemoX+Demo_Course",
+            "position": 4,
+            "user_id": "15",
+            "uri": "http://lms.mcka.local/api/server/courses/course-v1:edX+DemoX+Demo_Course/users/15"
+        }
+
+
+### Unenroll User from Course [DELETE]
+
++ Response 204 (application/json)
+
+
+## Course Content Group List [/courses/{course_id}/content/{content_id}/groups{?type}]
+
+It allows clients to retrieve a list of Course Content-Group relationships
+
+### Course Content Group List [GET]
+
+Returns a JSON representation of the set of Course Content-Group relationships.
+
++ Parameters
+    + type (optional)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "course_id": "course-v1:edX+DemoX+Demo_Course",
+                "content_id": "block-v1:edX+DemoX+Demo_Course+type@chapter+block@d8a6192ade314473a78242dfeedfbf5b",
+                "group_id": "21"
+            },
+            {
+                "course_id": "course-v1:edX+DemoX+Demo_Course",
+                "content_id": "block-v1:edX+DemoX+Demo_Course+type@chapter+block@d8a6192ade314473a78242dfeedfbf5b",
+                "group_id": "35"
+            }
+        ]
+
+
+### Creates Course Content Group Relationship [POST]
+
++ Attributes
+    + group_id (required)
+
++ Request (application/json)
+
+        {
+            "group_id" : 8,
+        }
+
+
++ Response 201 (application/json)
+
+        {
+            "course_id": "edX/CS301/2017_T1",
+            "group_id": "8",
+            "content_id": "i4x://edX/CS301/chapter/64f24c3c2d16492ba566f296ee0726a7",
+            "uri": "http://lms.mcka.local/api/server/courses/edX/CS301/2017_T1/content/i4x://edX/CS301/chapter/64f24c3c2d16492ba566f296ee0726a7/groups/8"
+        }
+
+
+## Course Content Group Detail [/courses/{course_id}/content/{content_id}/groups/{group_id}]
+
+It allows clients to interact with a specific Course Content-Group relationship
+
+### Course Content Group Detail [GET]
+
+Returns a JSON representation of the specified Course Content-Group relationship.
+
++ Response 200 (application/json)
+
+        {
+            "course_id": "edX/CS301/2017_T1",
+            "content_id": "i4x://edX/CS301/chapter/64f24c3c2d16492ba566f296ee0726a7",
+            "group_id": "8"
+        }
+
+
+## Course Content Users List [/courses/{course_id}/content/{content_id}/users{?enrolled}{?type}{?group_id}]
+
+It allows clients to list users enrolled and users not enrolled for course within all groups of course. Users can be filtered by enrollement status, group type and goup id
+
+### Course Content Users List [GET]
+
++ Parameters
+    + enrolled (optional)
+    + type (optional)
+    + group_id (optional)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 1,
+                "email": "ecommerce_worker@fake.email",
+                "username": "ecommerce_worker",
+                "first_name": "",
+                "last_name": "",
+                "created": "2016-09-01T18:43:34.865703Z",
+                "is_active": true,
+                "avatar_url": null,
+                "city": null,
+                "title": null,
+                "country": null,
+                "full_name": null,
+                "is_staff": false,
+                "last_login": null,
+                "courses_enrolled": 2,
+                "organizations": [],
+                "roles": [],
+                "grades": {
+                    "grade": null,
+                    "section_breakdown": null,
+                    "proforma_grade": null
+                }
+            },
+            {
+                "id": 2,
+                "email": "honor@example.com",
+                "username": "honor",
+                "first_name": "",
+                "last_name": "",
+                "created": "2016-09-01T19:18:14.237644Z",
+                "is_active": true,
+                "avatar_url": "",
+                "city": "Boston",
+                "title": "Software Engineer",
+                "country": "US",
+                "full_name": "Honor Student",
+                "is_staff": false,
+                "last_login": "2017-05-18T09:34:17.762289Z",
+                "courses_enrolled": 2,
+                "organizations": [],
+                "roles": [],
+                "grades": {
+                    "grade": null,
+                    "section_breakdown": null,
+                    "proforma_grade": null
+                }
+            },
+            {
+                "id": 3,
+                "email": "audit@example.com",
+                "username": "audit",
+                "first_name": "",
+                "last_name": "",
+                "created": "2016-09-01T19:18:18.204766Z",
+                "is_active": true,
+                "avatar_url": null,
+                "city": null,
+                "title": null,
+                "country": null,
+                "full_name": null,
+                "is_staff": false,
+                "last_login": null,
+                "courses_enrolled": 0,
+                "organizations": [],
+                "roles": [],
+                "grades": {
+                    "grade": null,
+                    "section_breakdown": null,
+                    "proforma_grade": null
+                }
+            }
+        ]
+
+
+## Course Module Completion List [/courses/{course_id}/completions{?user_id}{?content_id}{?stage}]
+
+It allows clients to view user's course module completion entities to monitor a user's progression throughout the duration of a course
+
+### Course Module Completion List [GET]
+
+Returns a JSON representation of the course, content and user and timestamps, user_id, content_id and stage filters can also be applied
++ Parameters
+    + user_id (optional)
+    + content_id (optional)
+    + stage (optional)
+
++ Response 200 (application/json)
+
+        {
+            "count": 2,
+            "previous": null,
+            "num_pages": 1,
+            "results": [
+                {
+                    "id": 1,
+                    "user_id": 8,
+                    "course_id": "course-v1:edX+DemoX+Demo_Course",
+                    "content_id": "block-v1:edX+DemoX+Demo_Course+type@about+block@overview",
+                    "stage": null,
+                    "created": "2017-05-11T13:15:54.338039Z",
+                    "modified": "2017-05-11T13:15:54.338455Z"
+                },
+                {
+                    "id": 2,
+                    "user_id": 15,
+                    "course_id": "course-v1:edX+DemoX+Demo_Course",
+                    "content_id": "block-v1:edX+DemoX+Demo_Course+type@html+block@6bcccc2d7343416e9e03fd7325b2f232",
+                    "stage": null,
+                    "created": "2017-05-11T14:14:31.159051Z",
+                    "modified": "2017-05-11T14:14:31.159561Z"
+                }
+            ],
+            "next": null
+        }
+
+
+### Create a Course Module Completion entity [POST]
+
+Append a Group entity to the set of related Group entities for the specified User
++ Attributes
+    + user_id (required)
+    + content_id (required)
+    + stage (optional)
+
++ Request (application/json)
+
+        {
+          "user_id": 15,
+          "content_id": "block-v1:edX+DemoX+Demo_Course+type@html+block@6bcccc2d7343416e9e03fd7325b2f232",
+          "stage": "First"
+        }
+
+
++ Response 201 (application/json)
+
+        {
+            "id": 12,
+            "user_id": 15,
+            "course_id": "course-v1:edX+DemoX+Demo_Course",
+            "content_id": "block-v1:edX+DemoX+Demo_Course+type@html+block@6bcccc2d7343416e9e03fd7325b2f232",
+            "stage": "First",
+            "created": "2017-05-17T14:09:24.482953Z",
+            "modified": "2017-05-17T14:09:24.483682Z"
+        }
+
+
+## Courses Metrics Grades List [/courses/{course_id}/grades{?user_id}{?groups}]
+
+It allows clients to retrieve a list of grades for the specified Course
+
+### Courses Metrics Grades List [GET]
+
+Returns a JSON representation of the set of grade objects
++ Parameters
+    + user_id (optional)
+    + groups (optional)
+
++ Response 200 (application/json)
+
+        {
+            "course_grade_maximum": 0,
+            "grade_count": 1,
+            "uri": "http://lms.mcka.local/api/server/courses/course-v1:edX+DemoX+Demo_Course/metrics/grades",
+            "course_grade_minimum": 0,
+            "grade_maximum": 0,
+            "grade_minimum": 0,
+            "grades": [
+                {
+                    "grade": 0
+                }
+            ],
+            "course_grade_average": 0,
+            "grade_average": 0,
+            "course_grade_count": 1
+        }
+
+
+## Courses Project List [/courses/{course_id}/projects]
+
+It allows clients to retrieve paginated list of projects by course
+
+### Courses Project List [GET]
+
+Returns a JSON representation of paginated list of projects for a course
+
++ Response 200 (application/json)
+
+        {
+            "count": 3,
+            "previous": null,
+            "num_pages": 1,
+            "results": [
+                {
+                    "id": 472,
+                    "url": "http://qa.mckinsey.edx.org/api/server/projects/472/",
+                    "created": "2017-04-17T08:33:04Z",
+                    "modified": "2017-04-17T08:33:04Z",
+                    "course_id": "bbg/cs1/2017",
+                    "content_id": "i4x://bbg/cs1/gp-v2-project/1b4fc43f58a14705bb6c4f0e68f4cbaa",
+                    "organization": 52,
+                    "workgroups": [
+                        1659,
+                        1660
+                    ]
+                },
+                {
+                    "id": 461,
+                    "url": "http://qa.mckinsey.edx.org/api/server/projects/461/",
+                    "created": "2017-03-16T07:25:34Z",
+                    "modified": "2017-03-16T07:25:34Z",
+                    "course_id": "bbg/cs1/2017",
+                    "content_id": "i4x://bbg/cs1/gp-v2-project/1b4fc43f58a14705bb6c4f0e68f4cbaa",
+                    "organization": 457,
+                    "workgroups": [
+                        1631,
+                        1632,
+                        1633,
+                        1634,
+                        1635,
+                        1636,
+                        1637,
+                        1638,
+                        1639,
+                        1640,
+                        1641
+                    ]
+                },
+                {
+                    "id": 470,
+                    "url": "http://qa.mckinsey.edx.org/api/server/projects/470/",
+                    "created": "2017-03-31T09:34:25Z",
+                    "modified": "2017-03-31T09:34:25Z",
+                    "course_id": "bbg/cs1/2017",
+                    "content_id": "i4x://bbg/cs1/gp-v2-project/1b4fc43f58a14705bb6c4f0e68f4cbaa",
+                    "organization": 458,
+                    "workgroups": [
+                        1654,
+                        1656
+                    ]
+                }
+            ],
+            "next": null
+        }
+
+
+## Courses Metrics List [/courses/{course_id}/metrics{?organization}{?groups}]
+
+It allows clients to retrieve a list of Metrics for the specified Course
+
+### Courses Metrics List [GET]
+
+Returns a JSON representation of the set of course metrics, metrics can be filtered by organization and groups
++ Parameters
+    + organization (optional)
+    + groups (optional)
+
++ Response 200 (application/json)
+
+        {
+            "num_threads": 0,
+            "num_active_threads": 0,
+            "users_not_started": 0,
+            "users_completed": 0,
+            "users_enrolled": 1,
+            "grade_cutoffs": {
+                "Pass": 0.6
+            },
+            "modules_completed": 11,
+            "users_started": 1
+        }
+
+
+## Courses Time Series Metrics List [/courses/{course_id}/time-series-metrics{?start_date}{?end_date}{?interval}{?organization}{?groups}]
+
+It allows clients to retrieve a list of Metrics for the specified Course in time series format.
+
+### Courses Time Series Metrics List [GET]
+
+Returns a JSON representation of metrics, metrics can be filtered by organization and groups
++ Parameters
+    + start_date (required)
+    + end_date (required)
+    + interval (optional)
+    + organization (optional)
+    + groups (optional)
+
++ Response 200 (application/json)
+
+        {
+            "users_not_started": [
+                [
+                    "2017-05-17T00:00:00Z",
+                    0
+                ],
+                [
+                    "2017-05-18T00:00:00Z",
+                    0
+                ]
+            ],
+            "users_completed": [
+                [
+                    "2017-05-17T00:00:00Z",
+                    0
+                ],
+                [
+                    "2017-05-18T00:00:00Z",
+                    0
+                ]
+            ],
+            "users_enrolled": [
+                [
+                    "2017-05-17T00:00:00Z",
+                    0
+                ],
+                [
+                    "2017-05-18T00:00:00Z",
+                    0
+                ]
+            ],
+            "active_users": [
+                [
+                    "2017-05-16T00:00:00Z",
+                    1
+                ],
+                [
+                    "2017-05-17T00:00:00Z",
+                    0
+                ]
+            ],
+            "modules_completed": [
+                [
+                    "2017-05-17T00:00:00Z",
+                    1
+                ],
+                [
+                    "2017-05-18T00:00:00Z",
+                    0
+                ]
+            ],
+            "users_started": [
+                [
+                    "2017-05-17T00:00:00Z",
+                    0
+                ],
+                [
+                    "2017-05-18T00:00:00Z",
+                    0
+                ]
+            ]
+        }
+
+
+## Courses Metrics Grades Leaders List [/courses/{course_id}/metrics/grades/leaders{?user_id}{?groups}{?count}{?exclude_roles}]
+
+It allows clients to retrieve top 3 users who are leading in terms of grade and course average for the specified Course. If user_id parameter is given it would return user's position.
+
+### Courses Metrics Grades Leaders List [GET]
+
+Returns a JSON representation of the users with grades
++ Parameters
+    + user_id (optional)
+    + groups (optional)
+    + count (optional)
+    + exclude_roles (optional)
+
++ Response 200 (application/json)
+
+        {
+            "course_avg": 0,
+            "leaders": [
+                {
+                    "id": 15,
+                    "username": "client_observer_user",
+                    "title": "",
+                    "avatar_url": null,
+                    "grade": 0,
+                    "recorded": "2017-05-11T13:07:53.703882Z"
+                },
+                {
+                    "id": 14,
+                    "username": "client_ta_user",
+                    "title": "",
+                    "avatar_url": null,
+                    "grade": 0,
+                    "recorded": "2017-05-18T07:37:14.167649Z"
+                },
+                {
+                    "id": 17,
+                    "username": "client_ta_user",
+                    "title": "",
+                    "avatar_url": null,
+                    "grade": 0,
+                    "recorded": "2017-05-18T07:37:14.167649Z"
+                }
+            ]
+        }
+
+
+## Courses Metrics Completions Leaders List [/courses/{course_id}/metrics/completions/leaders{?user_id}{?count}{?exclude_roles}{?skipleaders}{?organizations}{?groups}]
+
+It allows clients to retrieve top 3 users who are leading in terms of course module completions and course average for the specified Course, if user_id parameter is given position of user is returned.
+
+### Courses Metrics Completions Leaders List [GET]
+
+Returns a JSON representation of the users with points scored
++ Parameters
+    + user_id (optional)
+    + count (optional)
+    + exclude_roles (optional)
+    + skipleaders (optional)
+    + organizations (optional)
+    + groups (optional)
+
++ Response 200 (application/json)
+
+        {
+            "course_avg": 6.806349206101240,
+            "leaders": [
+                {
+                    "id": 15,
+                    "username": "client_observer_user",
+                    "title": "",
+                    "avatar_url": null,
+                    "completions": 13.095238095238097
+                },
+                {
+                    "id": 14,
+                    "username": "client_ta_user",
+                    "title": "",
+                    "avatar_url": null,
+                    "completions": 4.761904761904762
+                },
+                {
+                    "id": 10,
+                    "username": "client_ta_user",
+                    "title": "",
+                    "avatar_url": null,
+                    "completions": 2.561904761904762
+                }
+            ]
+        }
+
+
+## Courses Workgroups List [/courses/{course_id}/workgroups]
+
+It allows clients to retrieve a list of workgroups associated to a course.
+
+### Courses Workgroups List [GET]
+
+Returns a JSON representation of paginated list of workgroups associated to a course
+
++ Response 200 (application/json)
+
+        {
+            "count": 3,
+            "previous": null,
+            "num_pages": 1,
+            "results": [
+                {
+                    "id": 1659,
+                    "url": "http://qa.mckinsey.edx.org/api/server/workgroups/1659/",
+                    "created": "2017-04-17T08:33:55Z",
+                    "modified": "2017-04-17T08:33:55Z",
+                    "name": "Group 1",
+                    "project": "http://qa.mckinsey.edx.org/api/server/projects/472/"
+                },
+                {
+                    "id": 1660,
+                    "url": "http://qa.mckinsey.edx.org/api/server/workgroups/1660/",
+                    "created": "2017-04-17T08:34:02Z",
+                    "modified": "2017-04-18T11:30:06Z",
+                    "name": "Group 2",
+                    "project": "http://qa.mckinsey.edx.org/api/server/projects/472/"
+                },
+                {
+                    "id": 1631,
+                    "url": "http://qa.mckinsey.edx.org/api/server/workgroups/1631/",
+                    "created": "2017-03-16T07:25:57Z",
+                    "modified": "2017-03-16T07:25:57Z",
+                    "name": "Group 1",
+                    "project": "http://qa.mckinsey.edx.org/api/server/projects/461/"
+                }
+            ],
+            "next": null
+        }
+
+
+## Courses Metrics Social List [/courses/{course_id}/metrics/social{?organization}]
+
+It allows clients to query about the activity of all users in the forums.
+
+### Courses Metrics Social List [GET]
+
+Returns a list of social metrics for users in the specified course. Results can be filtered by organization
++ Parameters
+    + organization (optional)
+
++ Response 200 (application/json)
+
+        {
+            "total_enrollments": 4,
+            "users": {
+                "2": {
+                    "num_threads": 1,
+                    "num_thread_followers": 0,
+                    "num_replies": 0,
+                    "num_flagged": 0,
+                    "num_comments": 0,
+                    "num_threads_read": 0,
+                    "num_downvotes": 0,
+                    "num_upvotes": 0,
+                    "num_comments_generated": 0
+                },
+                "8": {
+                    "num_threads": 1,
+                    "num_thread_followers": 0,
+                    "num_replies": 0,
+                    "num_flagged": 0,
+                    "num_comments": 0,
+                    "num_threads_read": 0,
+                    "num_downvotes": 0,
+                    "num_upvotes": 0,
+                    "num_comments_generated": 0
+                }
+            }
+        }
+
+
+## Courses Metrics Cities [/courses/{course_id}/metrics/cities{?city}]
+
+It allows clients to retrieve ordered list of user count by city in a particular course.
+
+### Courses Metrics Cities [GET]
+
+Provides paginated list of user count by cities list can be filtered by city
++ Parameters
+    + city (optional)
+
++ Response 200 (application/json)
+
+        {
+            "count": 2,
+            "previous": null,
+            "num_pages": 1,
+            "results": [
+                {
+                    "city": "Seatle",
+                    "count": 1
+                },
+                {
+                    "city": "Boston",
+                    "count": 2
+                }
+            ],
+            "next": null
+        }
+
+
+## Courses Roles List [/courses/{course_id}/roles]
+
+It allows clients to interact with the Course's roleset.
+
+### Courses Roles List [GET]
+
+Returns a JSON representation of the specified Course roleset
+
++ Response 200 (application/json)
+
+        [
+            {
+                "role": "instructor",
+                "id": 21893
+            },
+            {
+                "role": "staff",
+                "id": 21893
+            },
+            {
+                "role": "assistant",
+                "id": 140363
+            }
+        ]
+
+
+### Create User Role Course relationship  [POST]
+
+Assign a role to a user for given Course
++ Attributes
+    + user_id (required)
+    + role (required)
+
++ Request (application/json)
+
+        {
+            "user_id" : 1,
+            "role": "staff"
+        }
+
+
++ Response 201 (application/json)
+
+        {
+            "role": "staff",
+            "user_id": 7
+        }
+
+
+## Course Role User Detail [/courses/{course_id}/roles/{role}/users/{user_id}]
+
+It allows clients to interact with a specific User Course Role.
+
+### Course Role User Detail [DELETE]
+
+Removes an existing User Course Role specification.
+
++ Response 204 (application/json)
+
+
+## Course Nav View [/courses/{course_id}/navigation/{module_id}]
+
+It exposes navigation information for particular usage id: course, chapter, section and vertical keys, position in innermost container and last addressable block/module on the path (usually the same usage id that was passed as an argument).
+
+### Course Nav View [GET]
+
+Returns navigation information
+
++ Response 200 (application/json)
+
+        {
+            "chapter": "i4x://bbg/cs1/chapter/04331cefe53a4cf9a01bd0854c5a7081",
+            "vertical": "i4x://bbg/cs1/vertical/None",
+            "section": "i4x://bbg/cs1/sequential/None",
+            "course_key": "bbg/cs1/2017",
+            "final_target_id": "i4x://bbg/cs1/chapter/04331cefe53a4cf9a01bd0854c5a7081",
+            "position": "None"
+        }
+
+
+# Group Groups
+Resources related to groups in the API.
+
+
+## Groups List [/groups{?type}]
+
+It allows clients to retrieve/append a list of Group entities
+
+### Groups List [GET]
+
+Returns a JSON representation of the set of Group entities
+
++ Parameters
+    + type (required)
+
++ Response 200 (application/json)
+
+        {
+            "count": 3,
+            "previous": null,
+            "num_pages": 1,
+            "results": [
+                {
+                    "id": 85,
+                    "url": "http://qa.mckinsey.edx.org/api/server/groups/85/",
+                    "name": "mcka_role_client_admin",
+                    "type": "permission",
+                    "data": "placeholder"
+                },
+                {
+                    "id": 86,
+                    "url": "http://qa.mckinsey.edx.org/api/server/groups/86/",
+                    "name": "mcka_role_mcka_admin",
+                    "type": "permission",
+                    "data": "placeholder"
+                },
+                {
+                    "id": 87,
+                    "url": "http://qa.mckinsey.edx.org/api/server/groups/87/",
+                    "name": "mcka_role_client_subadmin",
+                    "type": "permission",
+                    "data": "placeholder"
+                }
+            ],
+            "next": null
+        }
+
+
+### Create Group entity set  [POST]
+
+Provides the ability to append to the Group entity set
++ Attributes
+    + name (required)
+    + type (required)
+    + data (required)
+        + display_name (required)
+        + start_date (required)
+        + end_date (required)
+
++ Request (application/json)
+
+        {
+            "name" : "Alpha Series",
+            "type" : "series",
+            "data" : {
+                "display_name" : "Demo Program",
+                "start_date" : "2014-01-01",
+                "end_date" : "2014-12-31"
+            }
+        }
+
++ Response 201 (application/json)
+
+        {
+            "uri": "http://lms.mcka.local/api/server/groups/12",
+            "id": 12,
+            "name": "Alpha Series"
+        }
+
+
+## Group Detail [/groups/{group_id}]
+
+It allows clients to interact with a specific Group entity
+
+### Group Detail [GET]
+
+Returns a JSON representation of the specified Group entity
+
++ Response 200 (application/json)
+
+        {
+            "name": "mcka_role_client_observer",
+            "type": "permission",
+            "uri": "http://lms.mcka.local/api/server/groups/2",
+            "data": {},
+            "id": 2,
+            "resources": [
+                {
+                    "uri": "http://lms.mcka.local/api/server/groups/2/users"
+                },
+                {
+                    "uri": "http://lms.mcka.local/api/server/groups/2/groups"
+                },
+                {
+                    "uri": "http://lms.mcka.local/api/server/groups/2/courses"
+                }
+            ]
+        }
+
+
+### Update Group Detail  [POST]
+
+Provides the ability to modify specific fields for this Group entity
+
++ Attributes
+    + name (optional)
+    + type (optional)
+    + data (optional)
+        + display_name (optional)
+        + start_date (optional)
+        + end_date (optional)
+
++ Request (application/json)
+
+        {
+            "name" : "mcka obeserver"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "uri": "http://lms.mcka.local/api/server/groups/2",
+            "type": "permission",
+            "id": 2,
+            "name": "mcka obeserver"
+        }
+
+
+## Groups Users List [/groups/{group_id}/users]
+
+It allows clients to interact with the set of User entities related to the specified Group
+
+### Groups Users List [GET]
+
+Returns a JSON representation of the set of related User entities
+
++ Response 200 (application/json)
+
+        {
+            "users": [
+                {
+                    "username": "mcka_ta_user",
+                    "first_name": "mcka_ta_user",
+                    "last_name": "Tester",
+                    "id": 10,
+                    "email": "mcka_ta_user@mckinseyacademy.com"
+                },
+                {
+                    "username": "honor",
+                    "first_name": "",
+                    "last_name": "",
+                    "id": 2,
+                    "email": "honor@example.com"
+                }
+            ]
+        }
+
+
+### Create Groups Users relationship  [POST]
+
+Append a User entity to the specified group
+
++ Attributes
+    + user_id (required)
+
++ Request (application/json)
+
+        {
+            "user_id" : 3
+        }
+
++ Response 201 (application/json)
+
+        {
+            "group_id": "7",
+            "user_id": "3",
+            "uri": "http://lms.mcka.local/api/server/groups/7/users/3"
+        }
+
+
+## Groups Users Detail [/groups/{group_id}/users/{user_id}]
+
+It allows clients to interact with a specific Group-User relationship
+
+### Groups Users Detail [GET]
+
+Returns a JSON representation of the specified Group-User relationship
+
++ Response 200 (application/json)
+
+        {
+            "group_id": 7,
+            "user_id": 3,
+            "uri": "http://lms.mcka.local/api/server/groups/7/users/3"
+        }
+
+
+### Remove Group-User relationship [DELETE]
+
+Removes an existing Group-User relationship
+
++ Response 204 (application/json)
+
+
+## Groups Groups List [/groups/{group_id}/groups]
+
+It allows clients to interact with the set of Groups related to the specified Group
+
+### Groups Groups List [GET]
+
+Returns a JSON representation of the set of related Group entities
+
++ Response 200 (application/json)
+
+        [
+            {
+                "relationship_type": "g",
+                "id": 12,
+                "uri": "http://lms.mcka.local/api/server/groups/10/groups/12"
+            },
+            {
+                "relationship_type": "g",
+                "id": 11,
+                "uri": "http://lms.mcka.local/api/server/groups/10/groups/11"
+            }
+        ]
+
+### Create Groups Groups relationship  [POST]
+
+Provides the ability to append to the related Group entity set. Relationship paradigm, select from the following values: 'g' to create a graph(aka, linked) relationship with the specified Group and select 'h' to create a parent-child relationship with the specified Group
+
++ Attributes
+    + group_id (required)
+    + relationship_type (required)
+
++ Request (application/json)
+
+        {
+            "group_id" : 11,
+            "relationship_type" : "g"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "relationship_type": "g",
+            "group_id": "11",
+            "uri": "http://lms.mcka.local/api/server/groups/10/groups/11"
+        }
+
+
+## Groups Groups Detail [/groups/{group_id}/groups/{related_group_id}]
+
+It allows clients to interact with a specific Group-Group relationship
+
+### Groups Groups Detail [GET]
+
+Returns a JSON representation of the specified Group-Group relationship
+
++ Response 200 (application/json)
+
+        {
+            "relationship_type": "g",
+            "from_group_id": "10",
+            "to_group_id": "11",
+            "uri": "http://lms.mcka.local/api/server/groups/10/groups/11"
+        }
+
+
+### Remove Group-Group relationship [DELETE]
+
+Removes an existing Group-Group relationship
+
++ Response 204 (application/json)
+
+
+## Groups Courses List [/groups/{group_id}/courses]
+
+It allows clients to interact with the set of Courses related to the specified Group
+
+### Groups Courses List [GET]
+
+Returns a JSON representation of the set of related Course entities
+
++ Response 200 (application/json)
+
+        [
+            {
+                "course_id": "edX/CS301/2017_T1",
+                "display_name": "Introduction to Algorithms"
+            },
+            {
+                "course_id": "course-v1:edX+DemoX+Demo_Course",
+                "display_name": "edX Demonstration Course"
+            }
+        ]
+
+
+### Create Groups Courses relationship  [POST]
+
+Provides the ability to append to the related Course entity set
+
++ Attributes
+    + course_id (required)
+
++ Request (application/json)
+
+        {
+            "course_id" : "edX/CS301/2017_T1"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "course_id": "edX/CS301/2017_T1",
+            "group_id": "10",
+            "uri": "http://lms.mcka.local/api/server/groups/10/courses/edX/CS301/2017_T1"
+        }
+
+
+## Groups Courses Detail [/groups/{group_id}/courses/{course_id}]
+
+It allows clients to interact with a specific Group-Course relationship
+
+### Groups Courses Detail [GET]
+
+Returns a JSON representation of the specified Group-Course relationship
+
++ Response 200 (application/json)
+
+        {
+            "course_id": "edX/CS301/2017_T1",
+            "group_id": 10,
+            "uri": "http://lms.mcka.local/api/server/groups/10/courses/edX/CS301/2017_T1"
+        }
+
+
+### Remove Group-Course relationship [DELETE]
+
+Removes an existing Group-Course relationship
+
++ Response 204 (application/json)
+
+
+## Groups Organizations List [/groups/{group_id}/organizations]
+
+It allows clients to interact with the set of Organizations related to the specified Group
+
+### Groups Organizations List [GET]
+
+Returns a JSON representation of the set of related Organization entities
+
++ Response 200 (application/json)
+
+        [
+            {
+                "url": "http://lms.mcka.local/api/server/organizations/1/",
+                "id": 1,
+                "name": "mckinsey_and_company",
+                "display_name": "McKinsey and Company",
+                "contact_name": "McKinsey and Company",
+                "contact_email": "company@mckinseyacademy.com",
+                "contact_phone": "",
+                "logo_url": null,
+                "users": [
+                    8,
+                    9,
+                    10,
+                    11
+                ],
+                "groups": [
+                    3
+                ],
+                "created": "2017-05-11T12:37:16.581940Z",
+                "modified": "2017-05-11T12:37:17.248873Z"
+            },
+            {
+                "url": "http://lms.mcka.local/api/server/organizations/2/",
+                "id": 2,
+                "name": "edx",
+                "display_name": "edX",
+                "contact_name": "edx",
+                "contact_email": "company@edx.com",
+                "contact_phone": "",
+                "logo_url": null,
+                "users": [
+                    8
+                ],
+                "groups": [
+                    3
+                ],
+                "created": "2017-05-11T12:37:16.581940Z",
+                "modified": "2017-05-11T12:37:17.248873Z"
+            }
+        ]
+
+
+## Groups Workgroups List [/groups/{group_id}/workgroups{?course_id}]
+
+It allows clients to retrieve a list of workgroups a group has
+
+### Groups Workgroups List [GET]
+
+Provides paginated list of workgroups for a group, To filter the group's workgroup set by course use course_id parameter
+
++ Parameters
+    + course_id (optional)
+
++ Response 200 (application/json)
+
+        {
+            "count": 1,
+            "previous": null,
+            "num_pages": 1,
+            "results": [
+                {
+                    "id": 1,
+                    "url": "http://lms.mcka.local/api/server/workgroups/1/",
+                    "created": "2017-05-19T09:39:11.881055Z",
+                    "modified": "2017-05-19T09:39:11.881055Z",
+                    "name": "edx_wg",
+                    "project": "http://lms.mcka.local/api/server/projects/1/"
+                }
+            ],
+            "next": null
+        }
