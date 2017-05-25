@@ -4,7 +4,6 @@ HOST: http://api.edx.org
 # Open edX API
 Open edX API is the machine interface for the world-reknowned MOOC platform.
 
-
 ## Allowed HTTP/S requests:
 * <code>POST</code> - To create or update a resource
 * <code>GET</code> - To retrieve a resource or list of resources
@@ -28,6 +27,52 @@ Open edX API is the machine interface for the world-reknowned MOOC platform.
         "field_conflict":"fieldname"
     }
 
+# Group Progress APIs
+Resources related to Progress in the API.
+
+[Course Module Completion List](#reference/courses/course-module-completion-list)
+
+[Courses Metrics Completions Leaders List](#reference/courses/courses-metrics-completions-leaders-list)
+
+[User Course Completions List](#reference/users/user-course-completions-list)
+
+
+# Group Engagement APIs
+Resources related to Engagement in the API.
+
+[User Social Metrics](#reference/users/user-social-metrics)
+
+[Courses Metrics Social List](#reference/courses/courses-metrics-social-list)
+
+
+# Group Proficiency APIs
+Resources related to Proficiency in the API.
+
+[Courses Metrics Grades Leaders List](#reference/courses/courses-metrics-grades-leaders-list)
+
+
+# Group User Management APIs
+Resources related to User Management in the API.
+
+[List/Create Users](#reference/users/users-list)
+
+[Users Details/Update](#reference/users/users-detail)
+
+[Login User](#reference/sessions/sessions-list)
+
+[Log Out User](#reference/sessions/sessions-detail)
+
+[List/Create/Update User Roles](#reference/users/user-roles-list)
+
+[Delete User Roles](#reference/users/user-roles-courses-detail)
+
+[Enroll User to Course](#reference/users/users-courses-list)
+
+[UnEnroll User from Course](#reference/users/users-courses-detail)
+
+[List/Create User Preferences](#reference/users/user-preferences)
+
+[Delete User Preferences](#reference/users/user-preferences-detail)
 
 # Group Api
 Resources related to the API.
@@ -1777,7 +1822,7 @@ Provides paginated list of user count, To get user count a particular city, city
         }
 
 
-## User Roles List [/users/{user_id}/courses/{course_id}/roles]
+## User Roles List [/users/{user_id}/roles]
 
 It allows clients to interact with the User's roleset
 
@@ -3501,4 +3546,360 @@ Provides paginated list of workgroups for a group, To filter the group's workgro
                 }
             ],
             "next": null
+        }
+
+
+# Group Organizations
+Resources related to Organizations in the API.
+
+## Organizations List [/organizations{?display_name}]
+
+It allows clients to retrieve a list of organizations
+
+### Organizations List [GET]
+
+Provides paginated list of organizations
+
++ Parameters
+    + display_name (optional)
+
++ Response 200 (application/json)
+
+        {
+            "count": 2,
+            "previous": null,
+            "num_pages": 1,
+            "results": [
+                {
+                    "url": "http://lms.mcka.local/api/server/organizations/1/",
+                    "id": 1,
+                    "name": "mckinsey_and_company",
+                    "display_name": "McKinsey and Company",
+                    "number_of_courses": 2,
+                    "contact_name": "McKinsey and Company",
+                    "contact_email": "company@mckinseyacademy.com",
+                    "contact_phone": "",
+                    "logo_url": null,
+                    "created": "2017-05-11T12:37:16.581940Z",
+                    "modified": "2017-05-11T12:37:17.248873Z",
+                    "number_of_participants": 4
+                },
+                {
+                    "url": "http://lms.mcka.local/api/server/organizations/2/",
+                    "id": 2,
+                    "name": "edx",
+                    "display_name": "edX",
+                    "number_of_courses": 2,
+                    "contact_name": "edx",
+                    "contact_email": "company@edx.com",
+                    "contact_phone": "",
+                    "logo_url": null,
+                    "created": "2017-05-11T12:37:16.581940Z",
+                    "modified": "2017-05-11T12:37:17.248873Z",
+                    "number_of_participants": 1
+                }
+            ],
+            "next": null
+        }
+
+## Organizations Detail [/organizations/{organization_id}]
+
+It allows clients to interact with a specific organization
+
+### Organizations Detail [GET]
+
+Returns a JSON representation of the specified organization
+
++ Response 200 (application/json)
+
+        {
+            "url": "http://lms.mcka.local/api/server/organizations/1/",
+            "id": 1,
+            "name": "mckinsey_and_company",
+            "display_name": "McKinsey and Company",
+            "contact_name": "McKinsey and Company",
+            "contact_email": "company@mckinseyacademy.com",
+            "contact_phone": "",
+            "logo_url": null,
+            "created": "2017-05-11T12:37:16.581940Z",
+            "modified": "2017-05-11T12:37:17.248873Z"
+        }
+
+## Organization Metrics [/organizations/{organization_id}/metrics{?courses}]
+
+It provide statistical information for the specified Organization
+
+### Organization Metrics [GET]
+
+Returns a JSON representation of the specified organization metrics
+
++ Parameters
+    + courses (optional)
+    
++ Response 200 (application/json)
+
+        {
+            "users_grade_complete_count": 0,
+            "users_grade_average": 0
+        }
+        
+
+## Organization Users List [/organizations/{organization_id}/users/{?course_id}{?include_course_counts}{?include_grades}{?view}]
+
+It allows clients to interact with a specific organization users
+
+### Organization Users List [GET]
+
+Returns users in an organization, course_id parameter should filter user by course, include_course_counts parameter should be `true` to get user's enrollment count, include_grades parameter should be `true` to get user's grades, view parameter can be used to get a particular data .i.e. view=ids to get list of user ids
+
++ Parameters
+    + course_id (optional)
+    + include_course_counts (optional)
+    + include_grades (optional)
+    + view (optional)
+    
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 8,
+                "email": "mcka_admin_user@mckinseyacademy.com",
+                "username": "mcka_admin_user",
+                "first_name": "mcka_admin_user",
+                "last_name": "Tester",
+                "created": "2017-05-11T12:37:15.043626Z",
+                "is_active": true
+            },
+            {
+                "id": 9,
+                "email": "mcka_subadmin_user@mckinseyacademy.com",
+                "username": "mcka_subadmin_user",
+                "first_name": "mcka_subadmin_user",
+                "last_name": "Tester",
+                "created": "2017-05-11T12:37:15.426030Z",
+                "is_active": true
+            },
+            {
+                "id": 10,
+                "email": "mcka_ta_user@mckinseyacademy.com",
+                "username": "mcka_ta_user",
+                "first_name": "mcka_ta_user",
+                "last_name": "Tester",
+                "created": "2017-05-11T12:37:15.583137Z",
+                "is_active": true
+            }
+        ]
+
+
+### Remove Organization Users [DELETE]
+
++ Attributes
+    + users (required)
+
++ Request (application/json)
+
+        {
+            "users": "11,10"
+        }
+        
++ Response 200 (application/json)
+        
+        {
+            "detail": "2 user(s) removed from organization"
+        }
+
+ 
+### Adds User to Organization [POST]
+
++ Attributes
+    + id (required)
+
++ Request (application/json)
+
+        {
+            "id" : 11
+        }
+
++ Response 201 (application/json)
+
+        {}
+
+
+## Organization Groups List [/organizations/{organization_id}/groups/{?view}{?type}]
+
+It allows clients to interact with a specific organization groups
+
+### Organization Groups List [GET]
+
+Returns groups in an organization, type parameter can be used to filter by group type, view parameter can be used to get a particular data .i.e. view=ids to get list of group ids
+
++ Parameters
+    + view (optional)
+    + type (optional)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 3,
+                "url": "http://lms.mcka.local/api/server/groups/3/",
+                "name": "mcka_role_mcka_admin",
+                "type": "permission",
+                "data": {}
+            },
+            {
+                "id": 4,
+                "url": "http://lms.mcka.local/api/server/groups/4/",
+                "name": "mcka_role_mcka_observer",
+                "type": "permission",
+                "data": {}
+            }
+        ]
+ 
+### Add Group to organization [POST]
+
++ Attributes
+    + id (required)
+
++ Request (application/json)
+
+        {
+            "id" : 4
+        }
+
++ Response 201 (application/json)
+
+        {}
+
+
+## Organization Courses List [/organizations/{organization_id}/courses/]
+
+It allows clients to interact with a specific organization courses
+
+### Organization Courses List [GET]
+
+Returns courses in an organization
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": "course-v1:edX+DemoX+Demo_Course",
+                "name": "edX Demonstration Course",
+                "category": "course",
+                "number": "DemoX",
+                "org": "edX",
+                "uri": "http://lms.mcka.local/api/server/courses/course-v1:edX+DemoX+Demo_Course",
+                "course_image_url": "/asset-v1:edX+DemoX+Demo_Course+type@asset+block@images_course_image.jpg",
+                "due": null,
+                "start": "2013-02-05T05:00:00Z",
+                "end": null,
+                "enrolled_users": [
+                    8
+                ]
+            },
+            {
+                "id": "edX/CS301/2017_T1",
+                "name": "Introduction to Algorithms",
+                "category": "course",
+                "number": "CS301",
+                "org": "edX",
+                "uri": "http://lms.mcka.local/api/server/courses/edX/CS301/2017_T1",
+                "course_image_url": "/c4x/edX/CS301/asset/images_course_image.jpg",
+                "due": null,
+                "start": "2017-01-01T00:00:00Z",
+                "end": null,
+                "enrolled_users": [
+                    8
+                ]
+            }
+        ]
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Organization Groups Users List [/organizations/{organization_id}/groups/{group_id}/users]
+
+It returns a collection of users for a organization group
+
+### Organization Groups Users List [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 1,
+                "email": "ecommerce_worker@fake.email",
+                "username": "ecommerce_worker",
+                "first_name": "",
+                "last_name": "",
+                "created": "2016-09-01T18:43:34.865703Z",
+                "is_active": true
+            },
+            {
+                "id": 2,
+                "email": "honor@example.com",
+                "username": "honor",
+                "first_name": "",
+                "last_name": "",
+                "created": "2016-09-01T19:18:14.237644Z",
+                "is_active": true
+            },
+            {
+                "id": 3,
+                "email": "audit@example.com",
+                "username": "audit",
+                "first_name": "",
+                "last_name": "",
+                "created": "2016-09-01T19:18:18.204766Z",
+                "is_active": true
+            }
+        ]
+
+
+### Remove User, Group and Organization relationship [DELETE]
+
++ Attributes
+    + users (required)
+
++ Request (application/json)
+
+        {
+            "users": "2,3"
+        }
+        
++ Response 200 (application/json)
+        
+        {
+            "detail": "user id(s) 2, 3 removed from organization 1's group 4"
+        }
+
+ 
+### Create User, Group and Organization relationship [POST]
+Creates a new relationship between the provided User, Group and Organization
+
++ Attributes
+    + users (required)
+
++ Request (application/json)
+
+        {
+            "users": "1,2,3"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "detail": "user id(s) 1, 2, 3 added to organization 1's group 4"
         }
