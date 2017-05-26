@@ -1,12 +1,13 @@
 FORMAT: 1A
 HOST: http://api.edx.org
 
-# Open edX API
-Open edX API is the machine interface for the world-reknowned MOOC platform.
+# edX solutions API
+edX solutions API is the machine interface for the world-reknowned MOOC platform.
 
 ## Allowed HTTP/S requests:
 * <code>POST</code> - To create or update a resource
 * <code>GET</code> - To retrieve a resource or list of resources
+* <code>PUT</code> - To update a resource
 * <code>DELETE</code> - To delete/inactivate a resource
 
 ## Description Of Usual Server Responses
@@ -21,58 +22,14 @@ Open edX API is the machine interface for the world-reknowned MOOC platform.
 * <code>409 Conflict</code> - POST - request conflicts with existing system state (e.g., duplicate resource).
 
 409 Conflicts arise during POST operations due to duplicate requests against constrained entities.  An additional set of elements is included in the response:
+    <code><pre>
     {
         . . .
         "message":"Information related to the conflict.",
         "field_conflict":"fieldname"
     }
-
-# Group Progress APIs
-Resources related to Progress in the API.
-
-[Course Module Completion List](#reference/courses/course-module-completion-list)
-
-[Courses Metrics Completions Leaders List](#reference/courses/courses-metrics-completions-leaders-list)
-
-[User Course Completions List](#reference/users/user-course-completions-list)
-
-
-# Group Engagement APIs
-Resources related to Engagement in the API.
-
-[User Social Metrics](#reference/users/user-social-metrics)
-
-[Courses Metrics Social List](#reference/courses/courses-metrics-social-list)
-
-
-# Group Proficiency APIs
-Resources related to Proficiency in the API.
-
-[Courses Metrics Grades Leaders List](#reference/courses/courses-metrics-grades-leaders-list)
-
-
-# Group User Management APIs
-Resources related to User Management in the API.
-
-[List/Create Users](#reference/users/users-list)
-
-[Users Details/Update](#reference/users/users-detail)
-
-[Login User](#reference/sessions/sessions-list)
-
-[Log Out User](#reference/sessions/sessions-detail)
-
-[List/Create/Update User Roles](#reference/users/user-roles-list)
-
-[Delete User Roles](#reference/users/user-roles-courses-detail)
-
-[Enroll User to Course](#reference/users/users-courses-list)
-
-[UnEnroll User from Course](#reference/users/users-courses-detail)
-
-[List/Create User Preferences](#reference/users/user-preferences)
-
-[Delete User Preferences](#reference/users/user-preferences-detail)
+    </pre></code>
+    
 
 # Group Api
 Resources related to the API.
@@ -4570,3 +4527,51 @@ Returns list of Peer Reviews
             "start": 0,
             "previous": null
         }
+        
+
+# Group Progress APIs
+Resources related to Progress in the API.
+
+[Course Module Completion List](#reference/courses/course-module-completion-list)
+
+[Courses Metrics Completions Leaders List](#reference/courses/courses-metrics-completions-leaders-list)
+
+[User Course Completions List](#reference/users/user-course-completions-list)
+
+
+# Group Engagement APIs
+Resources related to Engagement in the API.
+
+[User Social Metrics](#reference/users/user-social-metrics)
+
+[Courses Metrics Social List](#reference/courses/courses-metrics-social-list)
+
+
+# Group Proficiency APIs
+Resources related to Proficiency in the API.
+
+[Courses Metrics Grades Leaders List](#reference/courses/courses-metrics-grades-leaders-list)
+
+
+# Group User Management APIs
+Resources related to User Management in the API.
+
+[List/Create Users](#reference/users/users-list)
+
+[Users Details/Update](#reference/users/users-detail)
+
+[Login User](#reference/sessions/sessions-list)
+
+[Log Out User](#reference/sessions/sessions-detail)
+
+[List/Create/Update User Roles](#reference/users/user-roles-list)
+
+[Delete User Roles](#reference/users/user-roles-courses-detail)
+
+[Enroll User to Course](#reference/users/users-courses-list)
+
+[UnEnroll User from Course](#reference/users/users-courses-detail)
+
+[List/Create User Preferences](#reference/users/user-preferences)
+
+[Delete User Preferences](#reference/users/user-preferences-detail)
