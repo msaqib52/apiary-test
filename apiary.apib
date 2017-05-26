@@ -3816,19 +3816,6 @@ Returns courses in an organization
         ]
         
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## Organization Groups Users List [/organizations/{organization_id}/groups/{group_id}/users]
 
 It returns a collection of users for a organization group
@@ -3902,4 +3889,684 @@ Creates a new relationship between the provided User, Group and Organization
 
         {
             "detail": "user id(s) 1, 2, 3 added to organization 1's group 4"
+        }
+
+
+# Group Projects
+Resources related to projects in the API.
+
+## Projects List [/projects{?course_id}{?content_id}]
+It allows clients to interact with projects resources.
+
+### Projects List [GET]
+
+Returns list of projects, optionally filtered by course ID and content ID
++ Parameters
+    + course_id (optional)
+    + content_id (optional)
+
++ Response 200 (application/json)
+        
+        {
+            "count": 2,
+            "num_pages": 1,
+            "current_page": 1,
+            "results": [
+                {
+                    "id": 2,
+                    "url": "http://qa.mckinsey.edx.org/api/server/projects/2/",
+                    "created": "2014-06-26T09:45:27Z",
+                    "modified": "2014-10-16T20:36:27Z",
+                    "course_id": "DevUni/DE101/2014_D1",
+                    "content_id": "i4x://DevUni/DE101/chapter/46f1145400a24bcda03e07660f97ff59",
+                    "organization": null,
+                    "workgroups": [
+                        2,
+                        3,
+                        4
+                    ]
+                },
+                {
+                    "id": 3,
+                    "url": "http://qa.mckinsey.edx.org/api/server/projects/3/",
+                    "created": "2014-07-25T11:55:44Z",
+                    "modified": "2014-10-16T20:36:27Z",
+                    "course_id": "slashes:GroupUniv/GR101/2014G1",
+                    "content_id": "location:GroupUniv/GR101/2014G1/chapter/a3ba707d0e2144dd90199b020678dc28",
+                    "organization": null,
+                    "workgroups": [
+                        10,
+                        11,
+                        35,
+                        36,
+                        37
+                    ]
+                }
+            ],
+            "next": null,
+            "start": 0,
+            "previous": null
+        }
+        
+        
+## Projects List [/projects/{project_id}/workgroups/]
+It allows clients to interact with specified projects workgroups.
+
+### Projects List [GET]
+
+Returns list of projects, optionally filtered by course ID and content ID
+
++ Response 200 (application/json)
+        
+        [
+            {
+                "id": 1,
+                "url": "http://lms.mcka.local/api/server/workgroups/1/",
+                "created": "2017-05-19T09:39:11.881055Z",
+                "modified": "2017-05-19T09:39:11.881055Z",
+                "name": "edx_wg",
+                "project": 1,
+                "groups": [
+                    {
+                        "id": 10,
+                        "url": "http://lms.mcka.local/api/server/groups/10/",
+                        "name": "mcka_role_mcka_subadmin",
+                        "type": "permission",
+                        "data": {}
+                    }
+                ],
+                "users": [],
+                "submissions": [],
+                "workgroup_reviews": [],
+                "peer_reviews": []
+            }
+        ]
+
+
+### Add Workgroup to Project [POST]
+Creates a new relationship between the Project and Workgroup
+
++ Attributes
+    + id (required)
+
++ Request (application/json)
+
+        {
+            "id": 2
+        }
+
++ Response 201 (application/json)
+
+        {}
+        
+        
+# Group Submissions
+Resources related to Submissions in the API.
+
+## Workgroup Submissions List [/submissions]
+It allows clients to interact with Workgroup Submissions.
+
+### Workgroup Submissions List [GET]
+
+Returns list of Workgroup Submissions
+
++ Response 200 (application/json)
+        
+        {
+            "count": 2,
+            "num_pages": 1,
+            "current_page": 1,
+            "results": [
+                {
+                    "id": 5,
+                    "url": "http://qa.mckinsey.edx.org/api/server/submissions/5/",
+                    "created": "2014-08-04T06:58:39Z",
+                    "modified": "2014-08-04T06:58:39Z",
+                    "document_id": "issue_tree",
+                    "document_url": "https://qa-group-work.s3.amazonaws.com/workgroup_submissions/slashes%3AGroupUniv%2BGR101%2B2014G1/10/36f155bf8a367d33a7f943d5e3191e7e3d512120_MCKIN-1451.doc?Signature=5lK0PE0znUQOzQZsJYZL%2FJI0Icc%3D&Expires=1722495519&AWSAccessKeyId=AKIAJ2D6FVSXGJSAKK5A",
+                    "document_mime_type": "application/msword",
+                    "document_filename": "MCKIN-1451.doc",
+                    "user": 5004,
+                    "workgroup": 10,
+                    "reviews": []
+                },
+                {
+                    "id": 6,
+                    "url": "http://qa.mckinsey.edx.org/api/server/submissions/6/",
+                    "created": "2014-08-05T19:33:00Z",
+                    "modified": "2014-08-05T19:33:00Z",
+                    "document_id": "issue_tree",
+                    "document_url": "https://qa-group-work.s3.amazonaws.com/workgroup_submissions/slashes%3AMcKinseyAcademy%2B7PS%2B2014/16/871642e601b2731c34d29c0f93bed94f318cc1b8_andyp.jpg?Signature=gTA74TpPbGYr3AK%2FC5LH8OdP4Ns%3D&Expires=1722627180&AWSAccessKeyId=AKIAJ2D6FVSXGJSAKK5A",
+                    "document_mime_type": "image/jpeg",
+                    "document_filename": "andyp.jpg",
+                    "user": 5476,
+                    "workgroup": 16,
+                    "reviews": []
+                }
+            ],
+            "next": null,
+            "start": 0,
+            "previous": null
+        }
+        
+
+# Group Workgroups
+Resources related to projects in the API.
+
+## Workgroups List [/workgroups/]
+It allows clients to interact with workgroup resources.
+
+### Workgroups List [GET]
+
+Returns list of Workgroups
+
++ Response 200 (application/json)
+        
+        {
+            "count": 2,
+            "num_pages": 1,
+            "current_page": 1,
+            "results": [
+                {
+                    "id": 2,
+                    "url": "http://qa.mckinsey.edx.org/api/server/workgroups/2/",
+                    "created": "2014-06-26T09:46:09Z",
+                    "modified": "2014-08-08T09:45:24Z",
+                    "name": "Group 1",
+                    "project": 2,
+                    "groups": [
+                        {
+                            "id": 185,
+                            "url": "http://qa.mckinsey.edx.org/api/server/groups/185/",
+                            "name": "Assignment group for 2",
+                            "type": "reviewassignment",
+                            "data": {
+                                "assignment_date": "2014-06-26T10:25:45.617579Z"
+                            }
+                        }
+                    ],
+                    "users": [
+                        {
+                            "id": 4544,
+                            "url": "http://qa.mckinsey.edx.org/user_api/v1/users/4544/",
+                            "username": "devel1",
+                            "email": "devel1@yopmail.com",
+                            "first_name": "devel1",
+                            "last_name": "mcka1"
+                        },
+                        {
+                            "id": 4545,
+                            "url": "http://qa.mckinsey.edx.org/user_api/v1/users/4545/",
+                            "username": "devel2",
+                            "email": "devel2@yopmail.com",
+                            "first_name": "devel2",
+                            "last_name": "mcka2"
+                        },
+                        {
+                            "id": 4546,
+                            "url": "http://qa.mckinsey.edx.org/user_api/v1/users/4546/",
+                            "username": "devel3",
+                            "email": "devel3@yopmail.com",
+                            "first_name": "devel3",
+                            "last_name": "mcka3"
+                        },
+                        {
+                            "id": 4547,
+                            "url": "http://qa.mckinsey.edx.org/user_api/v1/users/4547/",
+                            "username": "devel4",
+                            "email": "devel4@yopmail.com",
+                            "first_name": "devel4",
+                            "last_name": "mcka4"
+                        }
+                    ],
+                    "submissions": [],
+                    "workgroup_reviews": [],
+                    "peer_reviews": []
+                },
+                {
+                    "id": 3,
+                    "url": "http://qa.mckinsey.edx.org/api/server/workgroups/3/",
+                    "created": "2014-06-26T09:46:18Z",
+                    "modified": "2014-06-26T10:25:45Z",
+                    "name": "Group 2",
+                    "project": 2,
+                    "groups": [
+                        {
+                            "id": 186,
+                            "url": "http://qa.mckinsey.edx.org/api/server/groups/186/",
+                            "name": "Assignment group for 3",
+                            "type": "reviewassignment",
+                            "data": {
+                                "assignment_date": "2014-06-26T10:25:45.724946Z"
+                            }
+                        }
+                    ],
+                    "users": [
+                        {
+                            "id": 4548,
+                            "url": "http://qa.mckinsey.edx.org/user_api/v1/users/4548/",
+                            "username": "devel5",
+                            "email": "devel5@yopmail.com",
+                            "first_name": "devel5",
+                            "last_name": "mcka5"
+                        },
+                        {
+                            "id": 4549,
+                            "url": "http://qa.mckinsey.edx.org/user_api/v1/users/4549/",
+                            "username": "devel6",
+                            "email": "devel6@yopmail.com",
+                            "first_name": "devel6",
+                            "last_name": "mcka6"
+                        },
+                        {
+                            "id": 4550,
+                            "url": "http://qa.mckinsey.edx.org/user_api/v1/users/4550/",
+                            "username": "devel7",
+                            "email": "devel7@yopmail.com",
+                            "first_name": "devel7",
+                            "last_name": "mcka7"
+                        },
+                        {
+                            "id": 4551,
+                            "url": "http://qa.mckinsey.edx.org/user_api/v1/users/4551/",
+                            "username": "devel8",
+                            "email": "devel8@yopmail.com",
+                            "first_name": "devel8",
+                            "last_name": "mcka8"
+                        }
+                    ],
+                    "submissions": [],
+                    "workgroup_reviews": [],
+                    "peer_reviews": []
+                }
+            ],
+        "next": null,
+        "start": 0,
+        "previous": null
+        }
+
+
+### Create Workgroup [POST]
+Creates a new Workgroup
+
++ Attributes
+    + project (required)
+    + name (optional)
+
++ Request (application/json)
+
+        {
+            "name": "edX WG",
+            "project": 1
+        }
+
++ Response 201 (application/json)
+
+        {
+            "id": 2,
+            "url": "http://lms.mcka.local/api/server/workgroups/2/",
+            "created": "2017-05-26T07:46:54.296378Z",
+            "modified": "2017-05-26T07:46:54.297125Z",
+            "name": "edX WG",
+            "project": 1,
+            "groups": [],
+            "users": [],
+            "submissions": [],
+            "workgroup_reviews": [],
+            "peer_reviews": []
+        }
+
+
+## Workgroup Groups List [/workgroups/{workgroup_id}/groups/]
+It allows clients to interact with workgroup Groups resources.
+
+### Workgroup Groups List [GET]
+
+Returns list of Groups in Workgroup
+
++ Response 200 (application/json)
+        
+        [
+            {
+                "id": 2,
+                "url": "http://lms.mcka.local/api/server/groups/2/",
+                "name": "mcka obeserver",
+                "type": "permission",
+                "data": {}
+            },
+            {
+                "id": 10,
+                "url": "http://lms.mcka.local/api/server/groups/10/",
+                "name": "mcka_role_mcka_subadmin",
+                "type": "permission",
+                "data": {}
+            }
+        ]
+
+
+### Add Group to Workgroup [POST]
+Creates a new Workgroup Group relationship
+
++ Attributes
+    + id (required)
+
++ Request (application/json)
+
+        {
+            "id": 2
+        }
+
++ Response 201 (application/json)
+
+        {}
+
+
+## Workgroup Users List [/workgroups/{workgroup_id}/users/]
+It allows clients to interact with workgroup Users resources.
+
+### Workgroup Users List [GET]
+
+Returns list of Users in Workgroup
+
++ Response 200 (application/json)
+        
+        [
+            {
+                "id": 2,
+                "url": "http://lms.mcka.local/user_api/v1/users/2/",
+                "username": "honor",
+                "email": "honor@example.com"
+            },
+            {
+                "id": 3,
+                "url": "http://lms.mcka.local/user_api/v1/users/3/",
+                "username": "audit",
+                "email": "audit@example.com"
+            }
+        ]
+
+
+### Add User to Workgroup [POST]
+Creates a new Workgroup User relationship
+
++ Attributes
+    + id (required)
+
++ Request (application/json)
+
+        {
+            "id": 2
+        }
+
++ Response 201 (application/json)
+
+        {}
+        
+### Remove User from Workgroup [DELETE]
+
+Removes an existing User from Workgroup
+
++ Attributes
+    + id (required)
+
++ Request (application/json)
+
+        {
+            "id": 3
+        }
+
++ Response 204 (application/json)    
+        
+
+## Workgroup Peer Reviews List [/workgroups/{workgroup_id}/peer_reviews/]
+It allows clients to interact with Workgroup Peer Reviews.
+
+### Workgroup Peer Reviews List [GET]
+
+Returns list of Peer Reviews in Workgroup
+
++ Response 200 (application/json)
+        
+        [
+            {
+                "id": 61,
+                "url": "http://qa.mckinsey.edx.org/api/server/peer_reviews/61/",
+                "created": "2014-07-28T11:02:10Z",
+                "modified": "2014-08-11T11:34:03Z",
+                "question": "peer_score",
+                "answer": "10",
+                "workgroup": 10,
+                "user": 5005,
+                "reviewer": "6143bec2b01b71e2cf7b689f6d3c9d00",
+                "content_id": null
+            },
+            {
+                "id": 62,
+                "url": "http://qa.mckinsey.edx.org/api/server/peer_reviews/62/",
+                "created": "2014-07-28T11:02:10Z",
+                "modified": "2014-07-28T11:02:10Z",
+                "question": "peer_q3",
+                "answer": "hti zcghj aukasd",
+                "workgroup": 10,
+                "user": 5005,
+                "reviewer": "6143bec2b01b71e2cf7b689f6d3c9d00",
+                "content_id": null
+            }
+        ]
+
+
+## Workgroup Workgroup Reviews List [/workgroups/{workgroup_id}/workgroup_reviews/]
+It allows clients to interact with Rorkgroup Reviews for a specific workgroup.
+
+### Workgroup Rorkgroup Reviews List [GET]
+
+Returns list of Workgroup Reviews for a specific Workgroup
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 89,
+                "url": "http://qa.mckinsey.edx.org/api/server/workgroup_reviews/89/",
+                "created": "2014-08-05T10:47:31Z",
+                "modified": "2014-08-05T10:47:31Z",
+                "question": "other_team_q3",
+                "answer": "80",
+                "workgroup": 10,
+                "reviewer": "fdd0f3a1d513b95ecc58255e32afcb64",
+                "content_id": "location:GroupUniv+GR101+2014G1+group-project+5562bdf89c444308a8aa66ae1b0d8156"
+            },
+            {
+                "id": 90,
+                "url": "http://qa.mckinsey.edx.org/api/server/workgroup_reviews/90/",
+                "created": "2014-08-05T10:47:31Z",
+                "modified": "2014-08-05T10:47:31Z",
+                "question": "other_team_q2",
+                "answer": "80",
+                "workgroup": 10,
+                "reviewer": "fdd0f3a1d513b95ecc58255e32afcb64",
+                "content_id": "location:GroupUniv+GR101+2014G1+group-project+5562bdf89c444308a8aa66ae1b0d8156"
+            }
+        ]
+        
+
+## Workgroup Submissions List [/workgroups/{workgroup_id}/submissions/]
+It allows clients to interact with Submissions for a specific workgroup.
+
+### Workgroup Submissions List [GET]
+
+Returns list of Submissions for a specific Workgroup
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 5,
+                "url": "http://qa.mckinsey.edx.org/api/server/submissions/5/",
+                "created": "2014-08-04T06:58:39Z",
+                "modified": "2014-08-04T06:58:39Z",
+                "document_id": "issue_tree",
+                "document_url": "https://qa-group-work.s3.amazonaws.com/workgroup_submissions/slashes%3AGroupUniv%2BGR101%2B2014G1/10/36f155bf8a367d33a7f943d5e3191e7e3d512120_MCKIN-1451.doc?Signature=5lK0PE0znUQOzQZsJYZL%2FJI0Icc%3D&Expires=1722495519&AWSAccessKeyId=AKIAJ2D6FVSXGJSAKK5A",
+                "document_mime_type": "application/msword",
+                "document_filename": "MCKIN-1451.doc",
+                "user": 5004,
+                "workgroup": 10,
+                "reviews": []
+            },
+            {
+                "id": 9,
+                "url": "http://qa.mckinsey.edx.org/api/server/submissions/9/",
+                "created": "2014-08-19T07:36:01Z",
+                "modified": "2014-08-19T07:36:01Z",
+                "document_id": "budget",
+                "document_url": "https://qa-group-work.s3.amazonaws.com/workgroup_submissions/slashes%3AGroupUniv%2BGR101%2B2014G1/10/483241715b360ac05ad301f63609899e958cf1cb_studentnew1.csv?Signature=At3%2BiuDtWufGz5YDGUKApDN5N4M%3D&Expires=1723793761&AWSAccessKeyId=AKIAJ2D6FVSXGJSAKK5A",
+                "document_mime_type": "text/csv",
+                "document_filename": "studentnew1.csv",
+                "user": 5004,
+                "workgroup": 10,
+                "reviews": []
+            }
+        ]
+        
+
+## Workgroup Grades List [/workgroups/{workgroup_id}/grades/]
+It allows clients to interact with Grades for a specific workgroup.
+
+### Add User to Workgroup [POST]
+Submit a grade for a Workgroup.  The grade will be applied to all members of the workgroup
+
++ Attributes
+    + course_id (required)
+    + content_id (required)
+    + grade (required)
+    + max_grade (required)
+
++ Request (application/json)
+
+        {
+            "course_id": "edX/CS301/2017_T1",
+            "content_id": "i4x://edX/CS301/chapter/64f24c3c2d16492ba566f296ee0726a7",
+            "grade": "8",
+            "max_grade": "10"
+        }
+
++ Response 201 (application/json)
+
+        {}
+
+
+# Group Workgroup Reviews
+Resources related to Workgroup Reviews in the API.
+
+## Workgroup Reviews List [/workgroup_reviews]
+It allows clients to interact with Workgroup Reviews.
+
+### Workgroup Reviews List [GET]
+
+Returns list of Workgroup Reviews
+
++ Response 200 (application/json)
+        
+        {
+            "count": 2,
+            "num_pages": 1,
+            "current_page": 1,
+            "results": [
+                {
+                    "id": 83,
+                    "url": "http://qa.mckinsey.edx.org/api/server/workgroup_reviews/83/",
+                    "created": "2014-08-04T07:01:09Z",
+                    "modified": "2014-08-04T07:01:23Z",
+                    "question": "other_team_q3",
+                    "answer": "85",
+                    "workgroup": 11,
+                    "reviewer": "6143bec2b01b71e2cf7b689f6d3c9d00",
+                    "content_id": "location:GroupUniv+GR101+2014G1+group-project+5562bdf89c444308a8aa66ae1b0d8156"
+                },
+                {
+                    "id": 84,
+                    "url": "http://qa.mckinsey.edx.org/api/server/workgroup_reviews/84/",
+                    "created": "2014-08-04T07:01:09Z",
+                    "modified": "2014-08-04T07:01:23Z",
+                    "question": "other_team_q2",
+                    "answer": "70",
+                    "workgroup": 11,
+                    "reviewer": "6143bec2b01b71e2cf7b689f6d3c9d00",
+                    "content_id": "location:GroupUniv+GR101+2014G1+group-project+5562bdf89c444308a8aa66ae1b0d8156"
+                }
+            ],
+            "next": null,
+            "start": 0,
+            "previous": null
+        }
+        
+    
+# Group Submission Reviews
+Resources related to Submission Reviews in the API.
+
+## Submission Reviews List [/submission_reviews]
+It allows clients to interact with Submission Reviews.
+
+### Submission Reviews List [GET]
+
+Returns list of Submission Reviews
+
++ Response 200 (application/json)
+        
+        {
+            "count": 0,
+            "num_pages": 1,
+            "current_page": 1,
+            "results": [],
+            "next": null,
+            "start": 0,
+            "previous": null
+        }
+        
+        
+# Group Peer Reviews
+Resources related to Peer Reviews in the API.
+
+## Peer Reviews List [/peer_reviews]
+It allows clients to interact with Peer Reviews.
+
+### Peer Reviews List [GET]
+
+Returns list of Peer Reviews
+
++ Response 200 (application/json)
+        
+        {
+            "count": 2,
+            "num_pages": 1,
+            "current_page": 1,
+            "results": [
+                {
+                    "id": 61,
+                    "url": "http://qa.mckinsey.edx.org/api/server/peer_reviews/61/",
+                    "created": "2014-07-28T11:02:10Z",
+                    "modified": "2014-08-11T11:34:03Z",
+                    "question": "peer_score",
+                    "answer": "10",
+                    "workgroup": 10,
+                    "user": 5005,
+                    "reviewer": "6143bec2b01b71e2cf7b689f6d3c9d00",
+                    "content_id": null
+                },
+                {
+                    "id": 62,
+                    "url": "http://qa.mckinsey.edx.org/api/server/peer_reviews/62/",
+                    "created": "2014-07-28T11:02:10Z",
+                    "modified": "2014-07-28T11:02:10Z",
+                    "question": "peer_q3",
+                    "answer": "hti zcghj aukasd",
+                    "workgroup": 10,
+                    "user": 5005,
+                    "reviewer": "6143bec2b01b71e2cf7b689f6d3c9d00",
+                    "content_id": null
+                }
+            ],
+            "next": null,
+            "start": 0,
+            "previous": null
         }
